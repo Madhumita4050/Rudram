@@ -1,6 +1,7 @@
 import { services as localServices } from '../data/services';
+import { API_BASE_URL } from '../config/api';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = API_BASE_URL;
 
 const getHeaders = () => {
   const token = localStorage.getItem('token');

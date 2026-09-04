@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Camera, CheckCircle, CreditCard } from 'lucide-react';
+import { API_BASE_URL } from '../config/api';
 
 export default function Register() {
   const [step, setStep] = useState(1); // 1: Form, 2: Payment, 3: Success
@@ -41,7 +42,7 @@ export default function Register() {
         data.append(key, formData[key]);
       });
 
-      const res = await fetch('http://localhost:5000/api/registrations', {
+      const res = await fetch(`${API_BASE_URL}/registrations`, {
         method: 'POST',
         body: data,
       });
