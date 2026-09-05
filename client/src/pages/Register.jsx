@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Camera, CheckCircle, CreditCard } from 'lucide-react';
+import { Camera, CheckCircle } from 'lucide-react';
 import { API_BASE_URL } from '../config/api';
 
 export default function Register() {
-  const [step, setStep] = useState(1); // 1: Form, 2: Payment, 3: Success
-  const [registrationId, setRegistrationId] = useState(null);
+  const [step, setStep] = useState(1); // 1: Form, 2: Success
+  const [submittedData, setSubmittedData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     role: '',
@@ -39,7 +39,9 @@ export default function Register() {
     try {
       const data = new FormData();
       Object.keys(formData).forEach(key => {
-        data.append(key, formData[key]);
+        if (formData[key] !== null && formData[key] !== undefined) {
+          data.append(key, formData[key]);
+        }
       });
 
       const res = await fetch(`${API_BASE_URL}/registrations`, {
@@ -48,94 +50,14 @@ export default function Register() {
       });
 
       const result = await res.json();
-      if (!res.ok) throw new Error(result.message || 'Registration failed');
-
-      setRegistrationId(result.registrationId);
-      setStep(2); // Go to Payment step
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handlePayment = async () => {
-    if (!registrationId) return;
-    setLoading(true);
-    try {
-      // 1. Create Razorpay order
-      const orderRes = await fetch(`http://localhost:5000/api/registrations/${registrationId}/create-razorpay-order`, {
-        method: 'POST',
-      });
-      const orderData = await orderRes.json();
-      
-      if (!orderRes.ok) throw new Error(orderData.message || 'Failed to create payment order');
-
-      // 2. Load Razorpay script if not already loaded
-      const loadScript = (src) => {
-        return new Promise((resolve) => {
-          const script = document.createElement('script');
-          script.src = src;
-          script.onload = () => resolve(true);
-          script.onerror = () => resolve(false);
-          document.body.appendChild(script);
-        });
-      };
-
-      const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
-      if (!res) {
-        alert('Razorpay SDK failed to load. Are you online?');
-        setLoading(false);
-        return;
+      if (!res.ok) {
+        throw new Error(result.message || 'Registration failed');
       }
 
-      // 3. Initialize Razorpay options
-      const options = {
-        key: orderData.key_id === 'dummy_key' ? 'rzp_test_dummykey12345' : orderData.key_id,
-        amount: orderData.order.amount,
-        currency: orderData.order.currency,
-        name: "RudranPay",
-        description: "Registration Fee",
-        handler: async function (response) {
-          try {
-            // Verify and update payment status in the database
-            const updateRes = await fetch(`http://localhost:5000/api/registrations/${registrationId}/payment`, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ 
-                paymentStatus: 'Completed',
-                razorpay_payment_id: response.razorpay_payment_id || "pay_dummy_12345",
-                razorpay_order_id: response.razorpay_order_id || orderData.order.id,
-                razorpay_signature: response.razorpay_signature || "dummy_signature" 
-              })
-            });
-            
-            const result = await updateRes.json();
-            if (!updateRes.ok) throw new Error(result.message || 'Payment update failed');
-            
-            setStep(3); // Go to Success step
-          } catch (err) {
-            alert(err.message);
-          }
-        },
-        prefill: {
-          name: formData.name,
-          email: formData.email,
-          contact: formData.contactNumber,
-        },
-        theme: {
-          color: "#10b981", // Emerald 500
-        },
-      };
-
-      if (orderData.key_id !== 'dummy_key') {
-        options.order_id = orderData.order.id;
-      }
-
-      const paymentObject = new window.Razorpay(options);
-      paymentObject.open();
+      setSubmittedData(result);
+      setStep(2); // Directly go to Success step
     } catch (error) {
-      alert(error.message);
+      alert(error.message || 'Failed to submit registration. Please check server connection.');
     } finally {
       setLoading(false);
     }
@@ -267,41 +189,24 @@ export default function Register() {
           )}
 
           {step === 2 && (
-            <div className="p-8 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="flex items-center justify-center gap-3 mb-6 pb-6 border-b border-slate-100">
-                <div className="bg-emerald-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shadow-md">2</div>
-                <h3 className="text-xl font-bold text-slate-800">Complete Registration Payment</h3>
-              </div>
-
-              <div className="bg-slate-50 rounded-2xl p-6 mb-8 max-w-sm mx-auto border border-slate-200 shadow-sm">
-                <div className="w-16 h-16 mx-auto bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-4 shadow-sm">
-                  <CreditCard className="w-8 h-8" />
-                </div>
-                <p className="text-sm text-slate-500 mb-2">Registration Fee</p>
-                <p className="font-extrabold text-3xl text-slate-900 mb-1">₹ 499.00</p>
-                <p className="text-xs text-slate-400">Secure payment via Razorpay</p>
-              </div>
-
-              <div className="flex justify-center">
-                <button onClick={handlePayment} disabled={loading} className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-10 rounded-xl shadow-lg transition-colors flex items-center justify-center gap-3 text-lg">
-                  <CreditCard className="w-6 h-6 text-amber-400" /> {loading ? 'Processing...' : 'Pay Now'}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {step === 3 && (
             <div className="p-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
                 <CheckCircle className="w-10 h-10" />
               </div>
               <h3 className="text-2xl font-extrabold text-slate-900 mb-2">Registration Complete!</h3>
-              <p className="text-slate-500 mb-8 max-w-md mx-auto">
-                Thank you for joining RudranPay. Your payment was successful and your application has been received. Our team will contact you shortly.
+              <p className="text-slate-600 mb-2 max-w-md mx-auto">
+                Thank you for registering with RudranPay. Your application details have been submitted successfully.
               </p>
-              <Link to="/" className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-sm font-bold rounded-xl text-white bg-amber-500 hover:bg-amber-600 shadow-md transition-colors">
-                Return to Dashboard
-              </Link>
+              {submittedData?.registrationId && (
+                <p className="text-xs font-semibold text-slate-400 mb-8">
+                  Application ID: #{submittedData.registrationId}
+                </p>
+              )}
+              <div className="flex justify-center gap-4">
+                <Link to="/" className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-sm font-bold rounded-xl text-white bg-amber-500 hover:bg-amber-600 shadow-md transition-colors">
+                  Return to Home
+                </Link>
+              </div>
             </div>
           )}
 

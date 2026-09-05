@@ -21,7 +21,7 @@ exports.createRegistration = async (req, res) => {
     });
 
     res.status(201).json({
-      message: 'Registration successful. Proceed to payment.',
+      message: 'Registration submitted successfully.',
       registrationId: newRegistration.id
     });
   } catch (error) {
