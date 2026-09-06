@@ -44,12 +44,18 @@ export default function Register() {
         }
       });
 
-      const res = await fetch(`${API_BASE_URL}/registrations`, {
-        method: 'POST',
-        body: data,
-      });
+      let res;
+      try {
+        res = await fetch(`${API_BASE_URL}/registrations`, {
+          method: 'POST',
+          body: data,
+        });
+      } catch (networkErr) {
+        console.error('Registration fetch network error:', networkErr);
+        throw new Error('Server se connect nahi ho pa raha, kripya thodi der baad try karein.');
+      }
 
-      const result = await res.json();
+      const result = await res.json().catch(() => ({}));
       if (!res.ok) {
         throw new Error(result.message || 'Registration failed');
       }
@@ -57,7 +63,11 @@ export default function Register() {
       setSubmittedData(result);
       setStep(2); // Directly go to Success step
     } catch (error) {
-      alert(error.message || 'Failed to submit registration. Please check server connection.');
+      if (error.message === 'Failed to fetch' || error.name === 'TypeError') {
+        alert('Server se connect nahi ho pa raha, kripya thodi der baad try karein.');
+      } else {
+        alert(error.message || 'Failed to submit registration. Please check server connection.');
+      }
     } finally {
       setLoading(false);
     }
