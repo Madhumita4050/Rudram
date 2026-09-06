@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const User = sequelize.define('User', {
+const ContactMessage = sequelize.define('ContactMessage', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -14,35 +14,33 @@ const User = sequelize.define('User', {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   phone: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  password: {
+  type: {
+    type: DataTypes.ENUM('Contact', 'Grievance', 'General'),
+    defaultValue: 'Contact',
+  },
+  subject: {
     type: DataTypes.STRING,
+    allowNull: true,
+  },
+  message: {
+    type: DataTypes.TEXT,
     allowNull: false,
   },
-  role: {
-    type: DataTypes.ENUM('user', 'admin'),
-    defaultValue: 'user',
-  },
-  walletBalance: {
-    type: DataTypes.FLOAT,
-    defaultValue: 0,
-  },
   status: {
-    type: DataTypes.ENUM('active', 'blocked'),
-    defaultValue: 'active',
+    type: DataTypes.ENUM('Pending', 'In Progress', 'Resolved'),
+    defaultValue: 'Pending',
   },
-  avatar: {
-    type: DataTypes.STRING,
+  adminReply: {
+    type: DataTypes.TEXT,
     allowNull: true,
   }
 }, {
   timestamps: true,
 });
 
-module.exports = User;
-
+module.exports = ContactMessage;
