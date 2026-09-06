@@ -15,6 +15,16 @@ import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import About from './pages/About';
+import Dashboard from './pages/Dashboard';
+
+// Admin Pages
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminRegistrations from './pages/admin/AdminRegistrations';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminRequests from './pages/admin/AdminRequests';
+import AdminServices from './pages/admin/AdminServices';
+import AdminInquiries from './pages/admin/AdminInquiries';
 
 // New Pages
 import Developers from './pages/Developers';
@@ -32,14 +42,17 @@ import Grievance from './pages/Grievance';
 
 function AppContent() {
   const location = useLocation();
-  const hideNavbarFooter = ['/login', '/signup'].includes(location.pathname.toLowerCase());
+  const isAdminPath = location.pathname.toLowerCase().startsWith('/admin');
+  const hideNavbarFooter = ['/login', '/signup'].includes(location.pathname.toLowerCase()) || isAdminPath;
 
   return (
     <div className="flex flex-col min-h-screen">
       {!hideNavbarFooter && <Navbar />}
       <main className="flex-grow">
         <Routes>
+          {/* Public & User Pages */}
           <Route path="/" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/services" element={<Services />} />
           <Route path="/services/:id" element={<ServiceDetail />} />
           <Route path="/payment-status" element={<PaymentStatus />} />
@@ -60,6 +73,16 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/register" element={<Register />} />
+
+          {/* Admin Panel Nested Routes */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="registrations" element={<AdminRegistrations />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="requests" element={<AdminRequests />} />
+            <Route path="services" element={<AdminServices />} />
+            <Route path="inquiries" element={<AdminInquiries />} />
+          </Route>
         </Routes>
       </main>
       {!hideNavbarFooter && <Footer />}
@@ -74,3 +97,4 @@ export default function App() {
     </Router>
   );
 }
+

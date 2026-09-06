@@ -21,11 +21,17 @@ export default function Login() {
       if (!res.ok) throw new Error(data.message || 'Login failed');
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-      navigate('/'); 
+
+      if (data.user && data.user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
-      alert(err.message);
+      alert(err.message || 'Network error: Failed to connect to backend server');
     }
   };
+
 
   return (
     <div className="bg-slate-900 min-h-screen flex items-center justify-center px-4 relative overflow-hidden">

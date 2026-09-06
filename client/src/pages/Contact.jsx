@@ -1,20 +1,33 @@
 import React, { useState } from 'react';
 import { Phone, Mail, Clock, Send, CheckCircle2 } from 'lucide-react';
+import { submitContactMessage } from '../api/user';
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '', subject: 'General Support' });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // TODO: REPLACE WITH REAL API CALL TO BACKEND
-    // Send feedback data: POST /api/contact
-    // body: formData
-    
-    setSubmitted(true);
-    setFormData({ name: '', email: '', phone: '', message: '' });
+    try {
+      setLoading(true);
+      await submitContactMessage({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        type: 'Contact',
+        subject: formData.subject || 'Support Ticket',
+        message: formData.message
+      });
+      setSubmitted(true);
+      setFormData({ name: '', email: '', phone: '', message: '', subject: 'General Support' });
+    } catch (err) {
+      alert('Error submitting message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <div className="bg-slate-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8">

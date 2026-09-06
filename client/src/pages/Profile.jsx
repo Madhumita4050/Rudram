@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { User, Mail, Smartphone, Calendar, Camera, Edit2, CheckCircle, LogOut, Save, X } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { User, Mail, Smartphone, Calendar, Camera, Edit2, CheckCircle, LogOut, Save, X, Shield, LayoutDashboard } from 'lucide-react';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -10,9 +10,11 @@ export default function Profile() {
   const [profilePic, setProfilePic] = useState(null);
   
   const [user, setUser] = useState({
-    name: 'User Name',
-    email: 'user@example.com',
-    phone: '+91 99999 88888',
+    id: 1,
+    name: 'User',
+    email: '',
+    phone: '',
+    role: 'user',
     kycStatus: 'Verified',
     joinedDate: new Date().toISOString().split('T')[0]
   });
@@ -22,12 +24,15 @@ export default function Profile() {
     if (savedUser) {
       try {
         const parsedUser = JSON.parse(savedUser);
-        setUser(prev => ({ 
-          ...prev, 
-          name: parsedUser.name || prev.name, 
-          email: parsedUser.email || prev.email,
-          phone: parsedUser.phone || prev.phone
-        }));
+        setUser({ 
+          id: parsedUser.id || 1,
+          name: parsedUser.name || 'User', 
+          email: parsedUser.email || '',
+          phone: parsedUser.phone || '',
+          role: parsedUser.role || 'user',
+          kycStatus: 'Verified',
+          joinedDate: parsedUser.createdAt ? new Date(parsedUser.createdAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+        });
       } catch (e) {
         // error parsing user
       }
@@ -37,6 +42,8 @@ export default function Profile() {
       setProfilePic(savedPic);
     }
   }, []);
+
+
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -125,14 +132,33 @@ export default function Profile() {
               <h2 className="text-2xl font-extrabold text-slate-900">{user.name}</h2>
             )}
             
-            <p className="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wider">Customer ID: RP-CUST-8102</p>
+            <p className="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wider">Customer ID: RP-USR-00{user.id || '1'}</p>
 
-            {/* KYC status chip */}
-            <div className="mt-4 flex justify-center">
+            {/* KYC status chip & Admin Badge */}
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
               <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-600 border border-emerald-200 text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full shadow-sm">
                 <CheckCircle className="h-4 w-4" /> KYC {user.kycStatus}
               </span>
+
+              {user.role === 'admin' && (
+                <span className="inline-flex items-center gap-1.5 bg-amber-500/10 text-amber-600 border border-amber-500/30 text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-sm">
+                  <Shield className="h-3.5 w-3.5 text-amber-600" /> Admin Privileges
+                </span>
+              )}
             </div>
+
+            {/* Admin Panel Direct Action */}
+            {user.role === 'admin' && (
+              <div className="mt-5">
+                <Link
+                  to="/admin"
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm py-3 px-4 rounded-2xl transition-all shadow-lg shadow-amber-500/20"
+                >
+                  <LayoutDashboard className="h-5 w-5" />
+                  <span>Open Admin Dashboard</span>
+                </Link>
+              </div>
+            )}
 
             {/* Details list */}
             <div className="border-t border-slate-100 pt-6 mt-6 text-left space-y-5">
@@ -143,7 +169,7 @@ export default function Profile() {
                 </div>
                 <div className="flex-grow">
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Email Address</p>
-                  <p className="text-sm font-semibold text-slate-800">{user.email}</p>
+                  <p className="text-sm font-semibold text-slate-800">{user.email || 'Not Provided'}</p>
                 </div>
               </div>
               
@@ -158,13 +184,15 @@ export default function Profile() {
                       type="text" 
                       value={user.phone}
                       onChange={(e) => setUser({...user, phone: e.target.value})}
+                      placeholder="Enter mobile number"
                       className="text-sm font-semibold text-slate-800 bg-white border border-slate-300 rounded px-2 py-1 w-full focus:outline-none focus:border-amber-500"
                     />
                   ) : (
-                    <p className="text-sm font-semibold text-slate-800">{user.phone}</p>
+                    <p className="text-sm font-semibold text-slate-800">{user.phone || 'Not Provided'}</p>
                   )}
                 </div>
               </div>
+
 
               <div className="flex items-center gap-4 p-3 bg-slate-50 rounded-2xl border border-slate-100">
                 <div className="bg-white p-2.5 rounded-xl shadow-sm text-slate-400">

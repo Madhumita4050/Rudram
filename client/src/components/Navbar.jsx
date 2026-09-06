@@ -83,7 +83,7 @@ export default function Navbar() {
           </div>
 
           {/* Right Side: Download App, Notification Bell, User Profile / Auth */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-3">
             <a 
               href="#download" 
               onClick={(e) => { e.preventDefault(); alert("📥 RudranPay Mobile Application downloading started (APK format for testing)..."); }}
@@ -92,22 +92,40 @@ export default function Navbar() {
               Download App
             </a>
 
+            {user && user.role === 'admin' && (
+              <Link
+                to="/admin"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 rounded-full text-xs font-black shadow-lg shadow-amber-500/20 transition-all border border-amber-400 animate-pulse"
+              >
+                <span>⚙️ Admin Panel</span>
+              </Link>
+            )}
+
+            {user && (
+              <Link
+                to="/dashboard"
+                className="text-sm font-semibold text-slate-100 hover:text-amber-400 transition-colors px-2 py-1"
+              >
+                Dashboard
+              </Link>
+            )}
+
             <button className="p-1.5 rounded-full text-slate-300 hover:text-white hover:bg-slate-900 transition-colors">
               <Bell className="h-5 w-5" />
             </button>
             
             {user ? (
-              <div className="flex items-center space-x-3">
-                <Link to="/profile" className="flex items-center gap-2 px-4 py-2 bg-slate-900 border border-slate-700 text-slate-100 rounded-full text-sm font-semibold hover:border-slate-300 hover:bg-slate-800 transition-all">
-                  <UserIcon className="h-4 w-4 text-amber-400" />
-                  <span className="truncate max-w-[100px]">{user.name ? user.name.split(' ')[0] : 'User'}</span>
+              <div className="flex items-center space-x-2">
+                <Link to="/profile" className="flex items-center gap-2 px-3.5 py-1.5 bg-slate-900 border border-slate-700 text-slate-100 rounded-full text-xs font-semibold hover:border-slate-300 hover:bg-slate-800 transition-all">
+                  <UserIcon className="h-3.5 w-3.5 text-amber-400" />
+                  <span className="truncate max-w-[90px]">{user.name ? user.name.split(' ')[0] : 'User'}</span>
                 </Link>
                 <button 
                   onClick={handleLogout}
-                  className="p-2 text-slate-400 hover:text-red-400 hover:bg-slate-900 rounded-full transition-colors"
+                  className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-slate-900 rounded-full transition-colors"
                   title="Logout"
                 >
-                  <LogOut className="h-5 w-5" />
+                  <LogOut className="h-4 w-4" />
                 </button>
               </div>
             ) : (
@@ -182,14 +200,33 @@ export default function Navbar() {
               </Link>
 
               {user ? (
-                <div className="pt-2 border-t border-slate-800 mt-2">
-                  <div className="text-center text-sm font-bold text-amber-500 mb-2">
+                <div className="pt-2 border-t border-slate-800 mt-2 space-y-2">
+                  <div className="text-center text-sm font-bold text-amber-500 mb-1">
                     Welcome, {user.name ? user.name.split(' ')[0] : 'User'}!
                   </div>
+
+                  {user.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setIsOpen(false)}
+                      className="flex justify-center items-center gap-2 w-full py-2 text-sm font-bold bg-amber-500 text-slate-950 rounded-md hover:bg-amber-400"
+                    >
+                      ⚙️ Admin Panel
+                    </Link>
+                  )}
+
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setIsOpen(false)}
+                    className="flex justify-center items-center gap-2 w-full py-2 text-sm font-semibold bg-slate-900 border border-slate-700 text-slate-100 rounded-md hover:bg-slate-800"
+                  >
+                    User Dashboard
+                  </Link>
+
                   <Link
                     to="/profile"
                     onClick={() => setIsOpen(false)}
-                    className="flex justify-center items-center gap-2 w-full py-2 mb-2 text-sm font-medium border border-slate-700 text-slate-100 rounded-md hover:bg-slate-900"
+                    className="flex justify-center items-center gap-2 w-full py-2 text-sm font-medium border border-slate-700 text-slate-100 rounded-md hover:bg-slate-900"
                   >
                     <UserIcon className="h-4 w-4 text-amber-400" /> My Profile
                   </Link>
