@@ -14,7 +14,8 @@ import {
   ExternalLink,
   ChevronRight,
   Sparkles,
-  AlertCircle
+  AlertCircle,
+  QrCode
 } from 'lucide-react';
 import logoImg from '../../assets/logo.png';
 import { API_BASE_URL } from '../../config/api';
@@ -62,6 +63,7 @@ export default function AdminLayout({ children }) {
   const navItems = [
     { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { label: 'Registrations', path: '/admin/registrations', icon: FileCheck },
+    { label: 'Payment Settings', path: '/admin/payment-settings', icon: QrCode },
     { label: 'Users & Roles', path: '/admin/users', icon: Users },
     { label: 'Service Requests', path: '/admin/requests', icon: CreditCard },
     { label: 'Services Catalog', path: '/admin/services', icon: Layers },
@@ -102,10 +104,9 @@ export default function AdminLayout({ children }) {
     }
   };
 
-
   if (checkingAuth) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-4 border-amber-500 border-t-transparent"></div>
       </div>
     );
@@ -113,19 +114,18 @@ export default function AdminLayout({ children }) {
 
   if (!isAuthorized) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
-        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl relative z-10 text-white">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white border border-slate-200 rounded-3xl p-8 shadow-xl text-slate-900">
           <div className="text-center mb-6">
-            <div className="w-16 h-16 bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-3 border border-amber-500/20 shadow-md">
+            <div className="w-16 h-16 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-3 border border-amber-200 shadow-sm">
               <Shield className="w-8 h-8" />
             </div>
-            <h2 className="text-2xl font-black tracking-tight text-white">Admin Portal Access</h2>
-            <p className="text-xs text-slate-400 mt-1">Enter Administrator credentials to unlock control panel</p>
+            <h2 className="text-2xl font-black tracking-tight text-slate-900">Admin Portal Access</h2>
+            <p className="text-xs text-slate-500 mt-1">Enter Administrator credentials to unlock control panel</p>
           </div>
 
           {loginError && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-semibold flex items-center gap-2">
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-xs font-semibold flex items-center gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{loginError}</span>
             </div>
@@ -133,7 +133,7 @@ export default function AdminLayout({ children }) {
 
           <form onSubmit={handleAdminDirectLogin} className="space-y-4">
             <div>
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                 Admin Email ID
               </label>
               <input
@@ -142,12 +142,12 @@ export default function AdminLayout({ children }) {
                 value={adminEmail}
                 onChange={(e) => setAdminEmail(e.target.value)}
                 placeholder="admin@rudram.com"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 transition-colors"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                 Admin Password
               </label>
               <input
@@ -156,21 +156,21 @@ export default function AdminLayout({ children }) {
                 value={adminPassword}
                 onChange={(e) => setAdminPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 transition-colors"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
               />
             </div>
 
             <button
               type="submit"
               disabled={loginLoading}
-              className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm rounded-xl transition-all shadow-lg shadow-amber-500/20 disabled:opacity-50 mt-2"
+              className="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm rounded-xl transition-all shadow-md shadow-amber-500/20 disabled:opacity-50 mt-2"
             >
               {loginLoading ? 'Authenticating...' : 'Unlock Admin Dashboard'}
             </button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-slate-800/80 text-center">
-            <Link to="/" className="text-xs text-slate-400 hover:text-white transition-colors">
+          <div className="mt-6 pt-4 border-t border-slate-100 text-center">
+            <Link to="/" className="text-xs text-slate-500 hover:text-slate-900 font-semibold transition-colors">
               ← Return to Public Website
             </Link>
           </div>
@@ -179,46 +179,55 @@ export default function AdminLayout({ children }) {
     );
   }
 
-
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col md:flex-row">
       {/* Mobile Top Header */}
-      <div className="md:hidden flex items-center justify-between px-4 py-3 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40">
+      <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
         <div className="flex items-center gap-3">
           <img src={logoImg} alt="RudranPay" className="h-8 w-8 object-contain rounded-lg" />
-          <span className="font-bold text-white text-lg">Rudran Admin</span>
+          <span className="font-bold text-slate-900 text-base">Rudran Admin</span>
         </div>
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white"
-        >
-          {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleLogout}
+            title="Log Out"
+            className="p-2 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 text-xs font-bold flex items-center gap-1"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Logout</span>
+          </button>
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="p-2 rounded-lg bg-slate-100 text-slate-700 hover:text-slate-900"
+          >
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
 
       {/* Sidebar for Desktop & Mobile Overlay */}
       <aside
-        className={`fixed md:sticky top-0 left-0 h-screen w-72 bg-slate-900 border-r border-slate-800 flex flex-col justify-between z-50 transition-transform duration-300 ease-in-out ${
+        className={`fixed md:sticky top-0 left-0 h-screen w-72 bg-white border-r border-slate-200 flex flex-col justify-between z-50 transition-transform duration-300 ease-in-out shadow-sm ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
       >
         <div className="p-5 flex flex-col h-full overflow-y-auto">
           {/* Brand Header */}
-          <div className="flex items-center justify-between pb-6 border-b border-slate-800 mb-6">
+          <div className="flex items-center justify-between pb-6 border-b border-slate-100 mb-6">
             <Link to="/admin" className="flex items-center gap-3 group">
-              <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-400 text-slate-950 shadow-md group-hover:scale-105 transition-transform">
+              <div className="p-2 rounded-xl bg-amber-500 text-white shadow-md group-hover:scale-105 transition-transform">
                 <Shield className="w-6 h-6" />
               </div>
               <div>
-                <h1 className="text-lg font-black tracking-tight text-white flex items-center gap-1.5">
-                  RudranPay <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded">ADMIN</span>
+                <h1 className="text-lg font-black tracking-tight text-slate-900 flex items-center gap-1.5">
+                  RudranPay <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded">ADMIN</span>
                 </h1>
-                <p className="text-xs text-slate-400 font-medium">Control & Management Hub</p>
+                <p className="text-xs text-slate-500 font-medium">Control & Management Hub</p>
               </div>
             </Link>
             <button
               onClick={() => setMobileOpen(false)}
-              className="md:hidden p-1.5 rounded-lg text-slate-400 hover:text-white"
+              className="md:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-700"
             >
               <X className="w-5 h-5" />
             </button>
@@ -226,7 +235,7 @@ export default function AdminLayout({ children }) {
 
           {/* Navigation Items */}
           <div className="space-y-1.5 flex-1">
-            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider px-3 mb-2">Main Navigation</p>
+            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">Main Navigation</p>
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
@@ -237,12 +246,12 @@ export default function AdminLayout({ children }) {
                   onClick={() => setMobileOpen(false)}
                   className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                     isActive
-                      ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 font-bold'
-                      : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
+                      ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20 font-bold'
+                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className={`w-5 h-5 ${isActive ? 'text-slate-950' : 'text-slate-400'}`} />
+                    <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-400'}`} />
                     <span>{item.label}</span>
                   </div>
                   {isActive && <ChevronRight className="w-4 h-4" />}
@@ -252,67 +261,71 @@ export default function AdminLayout({ children }) {
           </div>
 
           {/* Bottom Actions & User Info */}
-          <div className="pt-4 mt-auto border-t border-slate-800 space-y-3">
+          <div className="pt-4 mt-auto border-t border-slate-100 space-y-3">
             <Link
               to="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
             >
               <span className="flex items-center gap-2">
-                <ExternalLink className="w-4 h-4 text-amber-400" /> View Public Site
+                <ExternalLink className="w-4 h-4 text-amber-500" /> View Public Site
               </span>
-              <span className="text-[10px] text-slate-500 bg-slate-800 px-2 py-0.5 rounded">Live</span>
+              <span className="text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded font-medium">Live</span>
             </Link>
 
-            <div className="p-3 bg-slate-950/60 rounded-2xl border border-slate-800 flex items-center justify-between">
+            {/* Admin Profile Box */}
+            <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
               <div className="flex items-center gap-2.5 overflow-hidden">
-                <div className="w-9 h-9 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm border border-amber-500/30 flex-shrink-0">
+                <div className="w-9 h-9 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm flex-shrink-0">
                   {currentUser?.name?.charAt(0) || 'A'}
                 </div>
                 <div className="overflow-hidden">
-                  <p className="text-xs font-bold text-white truncate">{currentUser?.name || 'Administrator'}</p>
-                  <p className="text-[10px] text-slate-400 truncate">{currentUser?.email}</p>
+                  <p className="text-xs font-bold text-slate-900 truncate">{currentUser?.name || 'Administrator'}</p>
+                  <p className="text-[10px] text-slate-500 truncate">{currentUser?.email}</p>
                 </div>
               </div>
-              <button
-                onClick={handleLogout}
-                title="Log Out"
-                className="p-2 rounded-xl text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-colors flex-shrink-0"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
             </div>
+
+            {/* Prominent Sidebar Logout Button */}
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-xl text-xs font-bold transition-all shadow-sm"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Logout Administrator</span>
+            </button>
           </div>
         </div>
       </aside>
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 min-h-screen">
-        <header className="hidden md:flex items-center justify-between px-8 py-4 bg-slate-900/50 backdrop-blur-md border-b border-slate-800 sticky top-0 z-30">
+        <header className="hidden md:flex items-center justify-between px-8 py-4 bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-xs text-slate-400 font-medium">
+            <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
               <span>Admin Portal</span>
               <span>/</span>
-              <span className="text-amber-400 font-bold capitalize">
+              <span className="text-amber-600 font-bold capitalize">
                 {location.pathname.replace('/admin/', '').replace('/admin', 'Dashboard')}
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-xs font-semibold">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-full text-xs font-semibold">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               <span>System Live & Synced</span>
             </div>
 
-            <Link
-              to="/admin/registrations"
-              className="flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold border border-slate-700 transition-colors"
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-xl text-xs font-bold transition-all shadow-sm"
+              title="Logout from Admin"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Registrations</span>
-            </Link>
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Logout</span>
+            </button>
           </div>
         </header>
 
@@ -325,7 +338,7 @@ export default function AdminLayout({ children }) {
       {mobileOpen && (
         <div
           onClick={() => setMobileOpen(false)}
-          className="md:hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
+          className="md:hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40"
         ></div>
       )}
     </div>

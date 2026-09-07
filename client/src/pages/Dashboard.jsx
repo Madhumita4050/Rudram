@@ -130,7 +130,7 @@ export default function Dashboard() {
 
             <div className="pt-6 mt-6 border-t border-slate-100 flex items-center gap-3">
               <button
-                onClick={() => alert("Wallet recharge portal: Razorpay payment gateway will open.")}
+                onClick={() => alert("Wallet recharge portal: Scan PhonePe UPI QR or contact admin to top up your wallet balance.")}
                 className="flex-1 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-all text-center"
               >
                 + Add Money
@@ -167,8 +167,8 @@ export default function Dashboard() {
               {registrations.length === 0 ? (
                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div>
-                    <p className="text-xs font-bold text-slate-800">Become an Official Partner or Founder Member</p>
-                    <p className="text-[11px] text-slate-500">Apply for Field Officer, Personal Assistance, or Founder Member today.</p>
+                    <p className="text-xs font-bold text-slate-800">Become an Official Partner or Team Member</p>
+                    <p className="text-[11px] text-slate-500">Apply for Founder Member (₹830), Field Officer (₹570), Computer Operator (₹450), or Personal Assistant (₹1200).</p>
                   </div>
                   <Link
                     to="/register"

@@ -66,11 +66,11 @@ export default function AdminRequests() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-2.5">
-            <CreditCard className="w-7 h-7 text-amber-400" />
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
+            <CreditCard className="w-7 h-7 text-amber-500" />
             <span>Service Transactions & Orders</span>
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Track user bill payments, recharge orders, travel bookings, and update processing statuses.
           </p>
         </div>
@@ -80,8 +80,8 @@ export default function AdminRequests() {
         <div
           className={`p-4 rounded-2xl text-xs font-bold flex items-center gap-2 border ${
             message.type === 'success'
-              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-              : 'bg-red-500/10 text-red-400 border-red-500/20'
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+              : 'bg-rose-50 text-rose-700 border-rose-200'
           }`}
         >
           <AlertCircle className="w-4 h-4" />
@@ -90,7 +90,7 @@ export default function AdminRequests() {
       )}
 
       {/* Filter & Search Toolbar */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-lg flex flex-col md:flex-row items-center gap-4">
+      <div className="bg-white border border-slate-200 rounded-3xl p-4 sm:p-5 shadow-sm flex flex-col md:flex-row items-center gap-4">
         <div className="relative flex-1 w-full">
           <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
           <input
@@ -98,118 +98,123 @@ export default function AdminRequests() {
             placeholder="Search by Reference ID (e.g. RP-12345)..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-11 pr-4 py-2.5 bg-slate-950/60 border border-slate-800 rounded-2xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+            className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
         </div>
 
         <div className="flex items-center gap-2 w-full md:w-auto">
-          <span className="text-xs text-slate-400 font-semibold whitespace-nowrap">Status:</span>
+          <span className="text-xs text-slate-500 font-semibold whitespace-nowrap">Status:</span>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3.5 py-2.5 bg-slate-950/60 border border-slate-800 rounded-2xl text-xs text-white focus:outline-none focus:border-amber-500 w-full md:w-auto"
+            className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500 w-full md:w-auto cursor-pointer"
           >
-            <option value="All">All Transactions</option>
+            <option value="All">All Statuses</option>
             {statusOptions.map((s) => (
-              <option key={s} value={s} className="bg-slate-900">
-                {s}
-              </option>
+              <option key={s} value={s}>{s}</option>
             ))}
           </select>
         </div>
       </div>
 
-      {/* Transactions Table */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
+      {/* Requests Table */}
+      <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-950/40 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                 <th className="py-4 px-6">Reference ID</th>
                 <th className="py-4 px-6">Service</th>
-                <th className="py-4 px-6">Customer</th>
-                <th className="py-4 px-6">Amount / Mode</th>
-                <th className="py-4 px-6">Date</th>
-                <th className="py-4 px-6">Status</th>
+                <th className="py-4 px-6">User / Customer</th>
+                <th className="py-4 px-6">Amount</th>
+                <th className="py-4 px-6">Mode</th>
+                <th className="py-4 px-6">Processing Status</th>
                 <th className="py-4 px-6 text-right">Update Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 text-xs">
+            <tbody className="divide-y divide-slate-100 text-xs">
               {loading ? (
                 <tr>
-                  <td colSpan="7" className="py-12 text-center text-slate-500">
+                  <td colSpan="7" className="py-12 text-center text-slate-400">
                     <div className="inline-block animate-spin rounded-full h-8 w-8 border-2 border-amber-500 border-t-transparent mb-2"></div>
-                    <p>Loading transactions...</p>
+                    <p>Loading requests...</p>
                   </td>
                 </tr>
               ) : requests.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="py-12 text-center text-slate-500">
-                    <CreditCard className="w-10 h-10 mx-auto text-slate-600 mb-2" />
-                    <p className="font-semibold text-slate-400">No service transactions found.</p>
+                  <td colSpan="7" className="py-12 text-center text-slate-400">
+                    <CreditCard className="w-10 h-10 mx-auto text-slate-300 mb-2" />
+                    <p className="font-semibold text-slate-600">No transactions found.</p>
                   </td>
                 </tr>
               ) : (
-                requests.map((req) => (
-                  <tr key={req.id} className="hover:bg-slate-850/60 transition-colors">
+                requests.map((r) => (
+                  <tr key={r.id} className="hover:bg-slate-50 transition-colors">
                     {/* Ref ID */}
                     <td className="py-4 px-6">
-                      <span className="font-mono font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/20">
-                        {req.refId}
-                      </span>
+                      <p className="font-mono font-bold text-slate-900">{r.referenceId}</p>
+                      <p className="text-[10px] text-slate-400">{new Date(r.createdAt).toLocaleString()}</p>
                     </td>
 
                     {/* Service */}
                     <td className="py-4 px-6">
-                      <p className="font-bold text-white text-sm">{req.service?.title || 'Custom Service'}</p>
-                      <p className="text-[11px] text-slate-400">{req.service?.category || 'General'}</p>
+                      <span className="font-bold text-slate-900">{r.service?.title || 'Custom Service'}</span>
+                      <p className="text-[10px] text-slate-500">{r.service?.category || 'Utility'}</p>
                     </td>
 
-                    {/* Customer */}
+                    {/* User */}
                     <td className="py-4 px-6">
-                      <p className="font-bold text-slate-200">{req.user?.name || 'Guest User'}</p>
-                      <p className="text-[11px] text-slate-500">{req.user?.email}</p>
+                      <p className="font-semibold text-slate-900">{r.user?.name || 'Guest User'}</p>
+                      <p className="text-[11px] text-slate-500">{r.user?.email || 'N/A'}</p>
                     </td>
 
-                    {/* Amount & Mode */}
+                    {/* Amount */}
                     <td className="py-4 px-6">
-                      <p className="font-black text-white text-sm">₹ {req.amount}</p>
-                      <p className="text-[10px] text-slate-400 uppercase">{req.mode || 'Online'}</p>
+                      <p className="font-black text-slate-900 text-sm">₹{r.amount}</p>
                     </td>
 
-                    {/* Date */}
-                    <td className="py-4 px-6 text-slate-400">
-                      {new Date(req.createdAt).toLocaleDateString()}
+                    {/* Mode */}
+                    <td className="py-4 px-6">
+                      <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-[11px] font-semibold">
+                        {r.mode}
+                      </span>
                     </td>
 
                     {/* Status Badge */}
                     <td className="py-4 px-6">
                       <span
                         className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold border ${
-                          req.status === 'Completed'
-                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                            : req.status === 'In Progress'
-                            ? 'bg-sky-500/10 text-sky-400 border-sky-500/20'
-                            : req.status === 'Failed'
-                            ? 'bg-red-500/10 text-red-400 border-red-500/20'
-                            : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                          r.status === 'Completed'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            : r.status === 'Failed'
+                            ? 'bg-rose-50 text-rose-700 border-rose-200'
+                            : r.status === 'In Progress'
+                            ? 'bg-sky-50 text-sky-700 border-sky-200'
+                            : 'bg-amber-50 text-amber-700 border-amber-200'
                         }`}
                       >
-                        {req.status}
+                        {r.status === 'Completed' ? (
+                          <CheckCircle className="w-3.5 h-3.5" />
+                        ) : r.status === 'Failed' ? (
+                          <XCircle className="w-3.5 h-3.5" />
+                        ) : (
+                          <Clock className="w-3.5 h-3.5" />
+                        )}
+                        <span>{r.status}</span>
                       </span>
                     </td>
 
                     {/* Action Dropdown */}
                     <td className="py-4 px-6 text-right">
                       <select
-                        value={req.status}
-                        onChange={(e) => handleStatusChange(req.id, e.target.value)}
-                        disabled={updatingId === req.id}
-                        className="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-amber-500 cursor-pointer disabled:opacity-50"
+                        value={r.status}
+                        disabled={updatingId === r.id}
+                        onChange={(e) => handleStatusChange(r.id, e.target.value)}
+                        className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer"
                       >
-                        {statusOptions.map((s) => (
-                          <option key={s} value={s} className="bg-slate-900">
-                            Set: {s}
+                        {statusOptions.map((opt) => (
+                          <option key={opt} value={opt}>
+                            Set: {opt}
                           </option>
                         ))}
                       </select>

@@ -2,12 +2,16 @@ import { API_BASE_URL } from '../config/api';
 
 const API_URL = API_BASE_URL;
 
-const getHeaders = () => {
+const getHeaders = (isFormData = false) => {
   const token = localStorage.getItem('token');
-  return {
-    'Content-Type': 'application/json',
-    ...(token && { Authorization: `Bearer ${token}` })
-  };
+  const headers = {};
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
 };
 
 // 1. Dashboard Stats
@@ -37,11 +41,12 @@ export const getAdminRegistrationById = async (id) => {
   return res.json();
 };
 
-export const updateAdminRegistrationStatus = async (id, paymentStatus) => {
+export const updateAdminRegistrationStatus = async (id, data) => {
+  const payload = typeof data === 'string' ? { paymentStatus: data } : data;
   const res = await fetch(`${API_URL}/admin/registrations/${id}`, {
     method: 'PUT',
     headers: getHeaders(),
-    body: JSON.stringify({ paymentStatus })
+    body: JSON.stringify(payload)
   });
   if (!res.ok) throw new Error('Failed to update registration status');
   return res.json();
@@ -56,7 +61,33 @@ export const deleteAdminRegistration = async (id) => {
   return res.json();
 };
 
-// 3. Users Management
+// 3. Payment Settings Management
+export const getAdminPaymentSettings = async () => {
+  const res = await fetch(`${API_URL}/admin/payment-settings`, {
+    headers: getHeaders()
+  });
+  if (!res.ok) throw new Error('Failed to fetch payment settings');
+  return res.json();
+};
+
+export const updateAdminPaymentSettings = async (formData) => {
+  const res = await fetch(`${API_URL}/admin/payment-settings`, {
+    method: 'PUT',
+    headers: getHeaders(true), // Content-Type omitted so browser sets multipart boundary
+    body: formData
+  });
+  if (!res.ok) throw new Error('Failed to update payment settings');
+  return res.json();
+};
+
+// Public helper for fetching active payment settings (used on Register / Client pages)
+export const getPublicPaymentSettings = async () => {
+  const res = await fetch(`${API_URL}/registrations/payment-settings`);
+  if (!res.ok) throw new Error('Failed to fetch payment settings');
+  return res.json();
+};
+
+// 4. Users Management
 export const getAdminUsers = async (params = {}) => {
   const query = new URLSearchParams(params).toString();
   const res = await fetch(`${API_URL}/admin/users?${query}`, {
@@ -96,7 +127,7 @@ export const updateAdminUserWallet = async (id, amount, action = 'credit') => {
   return res.json();
 };
 
-// 4. Service Requests / Transactions
+// 5. Service Requests / Transactions
 export const getAdminRequests = async (params = {}) => {
   const query = new URLSearchParams(params).toString();
   const res = await fetch(`${API_URL}/admin/requests?${query}`, {
@@ -116,7 +147,7 @@ export const updateAdminRequestStatus = async (id, status) => {
   return res.json();
 };
 
-// 5. Services Catalog
+// 6. Services Catalog
 export const createAdminService = async (serviceData) => {
   const res = await fetch(`${API_URL}/admin/services`, {
     method: 'POST',
@@ -146,7 +177,7 @@ export const deleteAdminService = async (id) => {
   return res.json();
 };
 
-// 6. Inquiries / Grievances
+// 7. Inquiries / Grievances
 export const getAdminInquiries = async (params = {}) => {
   const query = new URLSearchParams(params).toString();
   const res = await fetch(`${API_URL}/admin/inquiries?${query}`, {

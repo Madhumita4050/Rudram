@@ -77,11 +77,11 @@ export default function AdminInquiries() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-2.5">
-            <MessageSquare className="w-7 h-7 text-amber-400" />
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
+            <MessageSquare className="w-7 h-7 text-amber-500" />
             <span>Customer Inquiries & Grievances</span>
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Review user feedback, grievance submissions, and resolve citizen support tickets.
           </p>
         </div>
@@ -91,8 +91,8 @@ export default function AdminInquiries() {
         <div
           className={`p-4 rounded-2xl text-xs font-bold flex items-center gap-2 border ${
             message.type === 'success'
-              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-              : 'bg-red-500/10 text-red-400 border-red-500/20'
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+              : 'bg-rose-50 text-rose-700 border-rose-200'
           }`}
         >
           <AlertCircle className="w-4 h-4" />
@@ -101,174 +101,190 @@ export default function AdminInquiries() {
       )}
 
       {/* Filter Toolbar */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-lg flex flex-col md:flex-row items-center gap-4">
+      <div className="bg-white border border-slate-200 rounded-3xl p-4 sm:p-5 shadow-sm flex flex-col md:flex-row items-center gap-4">
         <div className="flex items-center gap-2 w-full md:w-auto">
-          <span className="text-xs text-slate-400 font-semibold whitespace-nowrap">Category:</span>
+          <span className="text-xs text-slate-500 font-semibold whitespace-nowrap">Message Type:</span>
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-3.5 py-2.5 bg-slate-950/60 border border-slate-800 rounded-2xl text-xs text-white focus:outline-none focus:border-amber-500 w-full md:w-auto"
+            className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500 w-full md:w-auto cursor-pointer"
           >
             <option value="All">All Types</option>
-            <option value="Contact">Contact Inquiry</option>
-            <option value="Grievance">Grievance Ticket</option>
+            <option value="General">General Inquiry</option>
+            <option value="Support">Support Ticket</option>
+            <option value="Partnership">Partnership</option>
+            <option value="Grievance">Grievance</option>
           </select>
         </div>
 
         <div className="flex items-center gap-2 w-full md:w-auto">
-          <span className="text-xs text-slate-400 font-semibold whitespace-nowrap">Status:</span>
+          <span className="text-xs text-slate-500 font-semibold whitespace-nowrap">Status:</span>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3.5 py-2.5 bg-slate-950/60 border border-slate-800 rounded-2xl text-xs text-white focus:outline-none focus:border-amber-500 w-full md:w-auto"
+            className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500 w-full md:w-auto cursor-pointer"
           >
             <option value="All">All Statuses</option>
             <option value="Pending">Pending</option>
-            <option value="In Progress">In Progress</option>
             <option value="Resolved">Resolved</option>
+            <option value="Closed">Closed</option>
           </select>
         </div>
       </div>
 
-      {/* Inquiries List */}
-      <div className="space-y-4">
-        {loading ? (
-          [1, 2, 3].map((i) => (
-            <div key={i} className="h-32 bg-slate-900/80 rounded-3xl animate-pulse border border-slate-800"></div>
-          ))
-        ) : inquiries.length === 0 ? (
-          <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-12 text-center text-slate-500">
-            <MessageCircle className="w-12 h-12 mx-auto text-slate-600 mb-3" />
-            <p className="font-semibold text-slate-400 text-sm">No inquiries or grievances found.</p>
-          </div>
-        ) : (
-          inquiries.map((inq) => (
+      {/* Inquiries Cards Stream */}
+      {loading ? (
+        <div className="py-20 text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-2 border-amber-500 border-t-transparent mb-2"></div>
+          <p className="text-xs text-slate-400">Loading messages...</p>
+        </div>
+      ) : inquiries.length === 0 ? (
+        <div className="p-12 text-center bg-white border border-slate-200 rounded-3xl">
+          <MessageSquare className="w-12 h-12 mx-auto text-slate-300 mb-3" />
+          <p className="font-bold text-slate-700 text-sm">No inquiries matching filter</p>
+          <p className="text-xs text-slate-400 mt-1">Check back later for incoming citizen support queries.</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {inquiries.map((inq) => (
             <div
               key={inq.id}
-              className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 shadow-xl hover:border-slate-700 transition-all"
+              className="bg-white border border-slate-200 hover:border-amber-400/80 rounded-3xl p-6 shadow-sm transition-all flex flex-col md:flex-row items-start justify-between gap-6"
             >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800/80">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-sm">
-                    {inq.name?.charAt(0) || 'U'}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-white text-sm">{inq.name}</h3>
-                      <span className="text-[10px] uppercase font-bold px-2 py-0.5 bg-slate-800 text-amber-400 rounded border border-slate-700">
-                        {inq.type}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 mt-0.5">
-                      <span className="flex items-center gap-1"><Mail className="w-3 h-3 text-slate-500" /> {inq.email}</span>
-                      {inq.phone && <span className="flex items-center gap-1"><Phone className="w-3 h-3 text-slate-500" /> {inq.phone}</span>}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold border ${
-                      inq.status === 'Resolved'
-                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                        : inq.status === 'In Progress'
-                        ? 'bg-sky-500/10 text-sky-400 border-sky-500/20'
-                        : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-                    }`}
-                  >
-                    {inq.status}
+              <div className="space-y-3 flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="px-3 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-lg text-xs font-bold uppercase tracking-wider">
+                    {inq.type || 'General Inquiry'}
                   </span>
 
-                  <button
-                    onClick={() => handleOpenReplyModal(inq)}
-                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-xl text-xs font-semibold border border-slate-700 transition-colors"
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${
+                      inq.status === 'Resolved'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        : inq.status === 'Closed'
+                        ? 'bg-slate-100 text-slate-600 border-slate-200'
+                        : 'bg-amber-50 text-amber-700 border-amber-200'
+                    }`}
                   >
-                    Respond / Resolve
-                  </button>
-                </div>
-              </div>
+                    {inq.status === 'Resolved' ? <CheckCircle className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
+                    <span>{inq.status}</span>
+                  </span>
 
-              {/* Message Body */}
-              <div className="pt-4 text-xs">
-                {inq.subject && (
-                  <p className="font-bold text-slate-200 mb-1">Subject: {inq.subject}</p>
-                )}
-                <p className="text-slate-300 leading-relaxed bg-slate-950/50 p-3.5 rounded-2xl border border-slate-850">
-                  {inq.message}
+                  <span className="text-xs text-slate-400">
+                    {new Date(inq.createdAt).toLocaleString()}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-4 text-xs text-slate-600">
+                  <span className="flex items-center gap-1.5 font-bold text-slate-900 text-sm">
+                    <User className="w-4 h-4 text-amber-500" /> {inq.name}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Mail className="w-3.5 h-3.5 text-slate-400" /> {inq.email}
+                  </span>
+                  {inq.phone && (
+                    <span className="flex items-center gap-1.5">
+                      <Phone className="w-3.5 h-3.5 text-slate-400" /> {inq.phone}
+                    </span>
+                  )}
+                </div>
+
+                <p className="text-sm text-slate-800 bg-slate-50 p-4 rounded-2xl border border-slate-100 leading-relaxed">
+                  "{inq.message}"
                 </p>
 
                 {inq.adminReply && (
-                  <div className="mt-3 p-3.5 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl">
-                    <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-1">Admin Response Note:</p>
-                    <p className="text-slate-300">{inq.adminReply}</p>
+                  <div className="bg-emerald-50/60 border border-emerald-200 p-4 rounded-2xl text-xs">
+                    <p className="font-bold text-emerald-800 uppercase tracking-wider text-[10px] mb-1">Administrator Reply:</p>
+                    <p className="text-slate-800">{inq.adminReply}</p>
                   </div>
                 )}
               </div>
-            </div>
-          ))
-        )}
-      </div>
 
-      {/* Response Modal */}
+              <div className="flex-shrink-0 self-end md:self-center">
+                <button
+                  onClick={() => handleOpenReplyModal(inq)}
+                  className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold border border-slate-200 flex items-center gap-2 transition-all shadow-sm"
+                >
+                  <MessageCircle className="w-4 h-4 text-amber-500" />
+                  <span>{inq.adminReply ? 'Update Reply' : 'Reply / Resolve'}</span>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* REPLY MODAL */}
       {selectedInquiry && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
-            <button
-              onClick={() => setSelectedInquiry(null)}
-              className="absolute top-6 right-6 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-amber-500/10 text-amber-400 rounded-2xl">
-                <MessageSquare className="w-6 h-6" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 space-y-6 shadow-2xl text-slate-900">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-amber-50 text-amber-600 border border-amber-200">
+                  <MessageSquare className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 text-base">Inquiry Response</h3>
+                  <p className="text-xs text-slate-500">From: <span className="font-bold text-slate-800">{selectedInquiry.name}</span></p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-lg font-black text-white">Respond to Inquiry</h3>
-                <p className="text-xs text-slate-400">Applicant: {selectedInquiry.name} ({selectedInquiry.email})</p>
-              </div>
+              <button
+                onClick={() => setSelectedInquiry(null)}
+                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
-            <form onSubmit={handleReplySubmit} className="space-y-4 text-xs">
+            <form onSubmit={handleReplySubmit} className="space-y-4">
               <div>
-                <label className="block font-semibold text-slate-400 mb-1">Update Status</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">User Message</label>
+                <p className="text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  "{selectedInquiry.message}"
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Status</label>
                 <select
                   value={updatingStatus}
                   onChange={(e) => setUpdatingStatus(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer"
                 >
-                  <option value="Pending" className="bg-slate-900">Pending</option>
-                  <option value="In Progress" className="bg-slate-900">In Progress</option>
-                  <option value="Resolved" className="bg-slate-900">Resolved / Closed</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Resolved">Resolved</option>
+                  <option value="Closed">Closed</option>
                 </select>
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-400 mb-1">Internal Resolution Notes / Reply</label>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Admin Response / Resolution Note</label>
                 <textarea
                   rows="4"
-                  placeholder="Enter remarks or resolution details..."
+                  required
+                  placeholder="Enter reply or internal resolution notes..."
                   value={adminReply}
                   onChange={(e) => setAdminReply(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-950/80 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-amber-500 resize-none"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500"
                 ></textarea>
               </div>
 
-              <div className="flex items-center gap-3 pt-4">
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="flex-1 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl transition-colors shadow-md disabled:opacity-50"
-                >
-                  {submitting ? 'Updating...' : 'Save Resolution'}
-                </button>
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setSelectedInquiry(null)}
-                  className="py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl"
+                  className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-colors"
                 >
                   Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-amber-500/20 disabled:opacity-50 flex items-center gap-1.5"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>{submitting ? 'Saving...' : 'Submit Resolution'}</span>
                 </button>
               </div>
             </form>
