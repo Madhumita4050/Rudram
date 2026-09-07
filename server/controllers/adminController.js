@@ -17,8 +17,8 @@ exports.getDashboardStats = async (req, res) => {
     const totalServices = await Service.count();
     const pendingMessages = await ContactMessage.count({ where: { status: 'Pending' } });
 
-    // Calculate revenue from completed registrations (₹499 each) + completed requests
-    const regRevenue = completedRegistrations * 499;
+    // Calculate revenue from completed registrations (based on feeAmount) + completed requests
+    const regRevenue = await Registration.sum('feeAmount', { where: { paymentStatus: 'Completed' } }) || 0;
     const requestRevenueAgg = await RequestHistory.sum('amount', { where: { status: 'Completed' } }) || 0;
     const totalRevenue = regRevenue + requestRevenueAgg;
 
@@ -116,16 +116,18 @@ exports.getRegistrationById = async (req, res) => {
 exports.updateRegistrationStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { paymentStatus } = req.body;
+    const { paymentStatus, feeAmount, transactionId, adminNotes } = req.body;
 
     const registration = await Registration.findByPk(id);
     if (!registration) {
       return res.status(404).json({ message: 'Registration not found' });
     }
 
-    if (paymentStatus) {
-      registration.paymentStatus = paymentStatus;
-    }
+    if (paymentStatus !== undefined) registration.paymentStatus = paymentStatus;
+    if (feeAmount !== undefined) registration.feeAmount = parseFloat(feeAmount) || 0;
+    if (transactionId !== undefined) registration.transactionId = transactionId;
+    if (adminNotes !== undefined) registration.adminNotes = adminNotes;
+
     await registration.save();
 
     res.json({ message: 'Registration updated successfully', registration });

@@ -9,7 +9,7 @@ export default function About() {
         
         {/* Intro */}
         <div className="text-center mb-16 space-y-4">
-          <img src={logoImg} alt="RudranPay Logo" className="h-20 w-20 mx-auto object-contain rounded-2xl shadow-md" />
+          <img src={logoImg} alt="RudranPay Logo" className="h-20 w-20 mx-auto object-contain" />
           <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">About RudranPay</h1>
           <p className="text-base text-slate-500 max-w-xl mx-auto leading-relaxed">
             Empowering neighborhood retail stores, micro-ATMs, and digital kiosks with safe, robust fintech payouts and utility billing integrations.

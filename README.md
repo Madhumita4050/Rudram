@@ -39,18 +39,26 @@ npm install
 npm start
 ```
 
-## 🌐 Production Deployment Guide
+## 🔐 Default Admin Credentials & Panels
 
-### Frontend Deployment (Vercel / Netlify / Cloudflare Pages)
-1. **Environment Variables**:
-   - Frontend ko deploy karte waqt hosting dashboard (jaise Vercel ya Netlify) ke **Environment Variables** settings me `VITE_API_URL` set karna zaroori hai.
-   - Example: `VITE_API_URL = https://<YOUR_DEPLOYED_BACKEND_URL>/api`
-   - Local production builds ke liye aap [client/.env.production](file:///d:/Rudram/client/.env.production) me bhi ye value set kar sakte hain.
+### 🛡️ Admin Panel (`/admin`)
+- **URL**: `http://localhost:5173/admin`
+- **Default Email**: `admin@rudram.com`
+- **Default Password**: `Admin@12345`
+- **Features**:
+  - **Overview Dashboard**: Live statistics of total revenue, citizen registrations, users, service transactions, and support tickets.
+  - **Citizen Registrations**: View, filter by role (Founder Member, Field Officer, Personal Assistance) & status, preview uploaded documents/photo, approve/reject applications, print/export.
+  - **User & RBAC Management**: Manage users, promote to Admin or demote to User, block/unblock accounts, adjust wallet balance (credit/debit).
+  - **Service Transactions**: Monitor all utility and recharge orders, change real-time processing status (`Pending`, `In Progress`, `Completed`, `Failed`).
+  - **Service Catalog**: Create, edit, and delete services, configure pricing and Lucide icons.
+  - **Customer Inquiries & Grievances**: Review messages and grievance tickets, resolve issues with admin remarks.
 
-2. **Crucial Note on Vite Environment Variables**:
-   - Vite environment variables **build-time par JavaScript bundle ke andar bake (embed)** hote hain, runtime par nahi.
-   - Agar aap hosting dashboard me `VITE_API_URL` ko add ya update karte hain, to **naya deployment trigger (Redeploy)** karna zaroori hai taaki updated URL naye build bundle me include ho sake.
+### 👤 User Panel (`/dashboard`)
+- **URL**: `http://localhost:5173/dashboard`
+- **Features**:
+  - **Wallet Card**: Real-time wallet balance and quick passbook access.
+  - **Application Tracker**: Live tracking of submitted partner/officer registration applications.
+  - **Instant Digital Services**: 1-click launch to top services (Recharge, Electricity, Banking, Flights).
+  - **Passbook Stream**: Recent transactions and service status history.
 
-### Backend Deployment (Render / VPS / Railway / cPanel)
-- Server deploy karte waqt CORS allowlist me apni live domain (`https://rudranpay.com` / `https://www.rudranpay.com`) aur database environment variables (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`) configure karein.
 

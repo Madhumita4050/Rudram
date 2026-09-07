@@ -18,6 +18,7 @@ import {
   QrCode
 } from 'lucide-react';
 import logoImg from '../../assets/logo.png';
+import logoFullImg from '../../assets/logo_full.png';
 import { API_BASE_URL } from '../../config/api';
 
 export default function AdminLayout({ children }) {
@@ -64,7 +65,7 @@ export default function AdminLayout({ children }) {
     { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { label: 'Registrations', path: '/admin/registrations', icon: FileCheck },
     { label: 'Payment Settings', path: '/admin/payment-settings', icon: QrCode },
-    { label: 'Users & Roles', path: '/admin/users', icon: Users },
+    { label: 'Users', path: '/admin/users', icon: Users },
     { label: 'Service Requests', path: '/admin/requests', icon: CreditCard },
     { label: 'Services Catalog', path: '/admin/services', icon: Layers },
     { label: 'Inquiries & Support', path: '/admin/inquiries', icon: MessageSquare },
@@ -214,16 +215,9 @@ export default function AdminLayout({ children }) {
         <div className="p-5 flex flex-col h-full overflow-y-auto">
           {/* Brand Header */}
           <div className="flex items-center justify-between pb-6 border-b border-slate-100 mb-6">
-            <Link to="/admin" className="flex items-center gap-3 group">
-              <div className="p-2 rounded-xl bg-amber-500 text-white shadow-md group-hover:scale-105 transition-transform">
-                <Shield className="w-6 h-6" />
-              </div>
-              <div>
-                <h1 className="text-lg font-black tracking-tight text-slate-900 flex items-center gap-1.5">
-                  RudranPay <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded">ADMIN</span>
-                </h1>
-                <p className="text-xs text-slate-500 font-medium">Control & Management Hub</p>
-              </div>
+            <Link to="/admin" className="flex items-center gap-2 group">
+              <img src={logoFullImg} alt="RudranPay" className="h-8 object-contain group-hover:scale-102 transition-transform" />
+              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded">ADMIN</span>
             </Link>
             <button
               onClick={() => setMobileOpen(false)}

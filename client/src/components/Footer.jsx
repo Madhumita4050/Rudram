@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logoImg from '../assets/logo.png';
+import logoFullImg from '../assets/logo_full.png';
 import { Shield, Sparkles, HelpCircle, PhoneCall } from 'lucide-react';
 
 export default function Footer() {
@@ -9,23 +9,22 @@ export default function Footer() {
   return (
     <footer className="bg-slate-900 text-slate-400 pt-16 pb-8 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Columns Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
-          
+
           {/* Col 1: Logo & Info */}
           <div className="lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <img src={logoImg} alt="RudranPay Logo" className="h-9 w-9 object-contain rounded-md" />
-              <span className="text-white text-lg font-bold">RudranPay</span>
+            <Link to="/" className="flex items-center gap-2 mb-4 group">
+              <img src={logoFullImg} alt="RudranPay Logo" className="h-8 object-contain brightness-0 invert group-hover:opacity-90 transition-opacity" />
             </Link>
             <p className="text-sm text-slate-400 mb-4 leading-relaxed">
               India's premier digital services and banking-correspondent platform for assisted financial payouts, recharges, and utility bills.
             </p>
             <div className="flex space-x-3">
               {['facebook', 'twitter', 'linkedin', 'youtube'].map((social) => (
-                <span 
-                  key={social} 
+                <span
+                  key={social}
                   className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-semibold uppercase text-slate-300 cursor-pointer hover:bg-amber-600 hover:text-white transition-colors"
                 >
                   {social[0]}
@@ -117,7 +116,7 @@ export default function Footer() {
               Safety Tip: Never share your OTP, password, or PIN code with anyone claiming to represent RudranPay.
             </p>
           </div>
-          
+
           {/* Simulated Payment Badges */}
           <div className="flex items-center space-x-2 text-slate-500 text-[10px]">
             <span className="px-2 py-1 bg-slate-800 border border-slate-700 rounded">UPI</span>

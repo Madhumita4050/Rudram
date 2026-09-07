@@ -79,10 +79,10 @@ export default function AdminInquiries() {
         <div>
           <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
             <MessageSquare className="w-7 h-7 text-amber-500" />
-            <span>Customer Inquiries & Grievances</span>
+            <span>Customer Inquiries & Support</span>
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Review user feedback, grievance submissions, and resolve citizen support tickets.
+            Review user feedback and resolve citizen support tickets.
           </p>
         </div>
       </div>
@@ -112,8 +112,6 @@ export default function AdminInquiries() {
             <option value="All">All Types</option>
             <option value="General">General Inquiry</option>
             <option value="Support">Support Ticket</option>
-            <option value="Partnership">Partnership</option>
-            <option value="Grievance">Grievance</option>
           </select>
         </div>
 

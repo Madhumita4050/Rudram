@@ -4,34 +4,20 @@ const dotenv = require('dotenv');
 const sequelize = require('./config/database');
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
+const path = require('path');
 
 dotenv.config();
 
 const app = express();
 
-// CORS configuration
-const allowedOrigins = [
-  'https://rudranpay.com',
-  'https://www.rudranpay.com',
-  'http://localhost:5173',
-  'http://localhost:3000',
-  'http://127.0.0.1:5173',
-  'http://localhost:5000',
-  process.env.CLIENT_URL
-].filter(Boolean);
-
+// CORS configuration - Support Hostinger, Render, Localhost, and custom domains
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, server-to-server)
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS: ' + origin));
-    }
+    callback(null, true);
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
 }));
 app.use(express.json());
 
@@ -41,6 +27,11 @@ const Service = require('./models/Service');
 const Registration = require('./models/Registration');
 const RequestHistory = require('./models/RequestHistory');
 const ContactMessage = require('./models/ContactMessage');
+const PaymentSetting = require('./models/PaymentSetting');
+
+// Payment settings public controller
+const paymentSettingController = require('./controllers/paymentSettingController');
+app.get('/api/payment-settings', paymentSettingController.getPaymentSettings);
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -50,12 +41,11 @@ app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/user', require('./routes/userRoutes'));
 
 // Serve uploads folder
-const path = require('path');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const PORT = process.env.PORT || 5000;
 
-// Helper to seed initial admin & services
+// Helper to seed initial admin, services & payment settings
 const seedInitialData = async () => {
   try {
     // 1. Seed Admin User
@@ -94,6 +84,57 @@ const seedInitialData = async () => {
       ];
       await Service.bulkCreate(dummyServices);
       console.log('✅ Default services seeded.');
+    }
+
+    // 3. Seed / Update Payment Settings with exact requested role prices & PhonePe details
+    let paymentSetting = await PaymentSetting.findByPk(1);
+    if (!paymentSetting) {
+      paymentSetting = await PaymentSetting.create({
+        id: 1,
+        payeeName: 'RUDRANARAYAN RUDRAN',
+        upiId: 'rudranarayan@upi',
+        qrCodeImage: 'uploads/payment-qr.png',
+        founderMemberFee: 830,
+        fieldOfficerFee: 570,
+        computerOperatorFee: 450,
+        personalAssistantFee: 1200,
+        bankName: 'State Bank of India',
+        accountNumber: '',
+        ifscCode: '',
+        accountHolder: 'RUDRANARAYAN RUDRAN',
+        isUpiActive: true,
+        isBankActive: true,
+        isCashActive: true,
+        instructions: 'Scan the PhonePe QR code, complete your payment, and enter the 12-digit UTR / UPI Reference ID below.'
+      });
+      console.log('✅ Default payment settings initialized with requested role fees.');
+    } else {
+      // Ensure pricing is up to date with requested defaults if unchanged
+      let updated = false;
+      if (paymentSetting.founderMemberFee === 499 || !paymentSetting.founderMemberFee) {
+        paymentSetting.founderMemberFee = 830;
+        updated = true;
+      }
+      if (paymentSetting.fieldOfficerFee === 499 || !paymentSetting.fieldOfficerFee) {
+        paymentSetting.fieldOfficerFee = 570;
+        updated = true;
+      }
+      if (paymentSetting.computerOperatorFee === 499 || !paymentSetting.computerOperatorFee) {
+        paymentSetting.computerOperatorFee = 450;
+        updated = true;
+      }
+      if (paymentSetting.personalAssistantFee === 499 || !paymentSetting.personalAssistantFee) {
+        paymentSetting.personalAssistantFee = 1200;
+        updated = true;
+      }
+      if (!paymentSetting.payeeName) {
+        paymentSetting.payeeName = 'RUDRANARAYAN RUDRAN';
+        updated = true;
+      }
+      if (updated) {
+        await paymentSetting.save();
+        console.log('✅ Payment settings updated with latest role fees.');
+      }
     }
   } catch (seedErr) {
     console.warn('⚠️ Seeding initial data notice:', seedErr.message);
@@ -135,4 +176,3 @@ const init = async () => {
 };
 
 init();
-

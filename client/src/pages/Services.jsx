@@ -11,7 +11,7 @@ export default function Services() {
   const [activeTab, setActiveTab] = useState('All');
   const [loading, setLoading] = useState(true);
 
-  const tabs = ['All', 'Recharge & Bills', 'Banking & Money', 'Identity & Govt', 'Travel'];
+  const tabs = ['All', 'Recharge & Bills', 'Banking & Money', 'Travel'];
 
   useEffect(() => {
     getServices().then((data) => {
