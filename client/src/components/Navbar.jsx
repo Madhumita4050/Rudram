@@ -131,8 +131,24 @@ export default function Navbar() {
                     Inquiries
                   </Link>
                 </>
+              ) : isUser ? (
+                /* USER PORTAL SPECIFIC LINKS ONLY */
+                <>
+                  <Link to="/dashboard" className={`text-sm font-bold px-4 py-2 rounded-xl transition-all ${location.pathname === '/dashboard' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                    Dashboard
+                  </Link>
+                  <Link to="/history" className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all ${location.pathname.startsWith('/history') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                    Passbook / History
+                  </Link>
+                  <Link to="/offers" className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all ${location.pathname.startsWith('/offers') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                    Special Offers
+                  </Link>
+                  <Link to="/contact" className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all ${location.pathname.startsWith('/contact') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                    Help & Support
+                  </Link>
+                </>
               ) : (
-                /* MAIN NAVIGATION: Services, Developers, Pricing, Resources, About, Support */
+                /* GUEST / PUBLIC NAVIGATION */
                 <>
                   <Link to="/services" className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all ${location.pathname.startsWith('/services') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
                     Services
@@ -273,8 +289,30 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Regular Public & User Navigation */}
-          {!isAdmin && (
+          {/* User Portal Mobile Links */}
+          {isUser && (
+            <div className="space-y-1.5">
+              <div className="text-[10px] font-bold text-blue-700 uppercase tracking-wider px-2 py-1">User Portal</div>
+              <Link to="/dashboard" onClick={() => setIsOpen(false)} className="block py-2 px-3 text-xs font-bold text-slate-700 hover:bg-slate-200 rounded-xl">
+                Dashboard
+              </Link>
+              <Link to="/history" onClick={() => setIsOpen(false)} className="block py-2 px-3 text-xs font-bold text-slate-700 hover:bg-slate-200 rounded-xl">
+                Passbook / History
+              </Link>
+              <Link to="/offers" onClick={() => setIsOpen(false)} className="block py-2 px-3 text-xs font-bold text-slate-700 hover:bg-slate-200 rounded-xl">
+                Special Offers
+              </Link>
+              <Link to="/contact" onClick={() => setIsOpen(false)} className="block py-2 px-3 text-xs font-bold text-slate-700 hover:bg-slate-200 rounded-xl">
+                Help & Support
+              </Link>
+              <Link to="/profile" onClick={() => setIsOpen(false)} className="block py-2 px-3 text-xs font-bold text-slate-700 hover:bg-slate-200 rounded-xl">
+                My Profile
+              </Link>
+            </div>
+          )}
+
+          {/* Guest Public Links */}
+          {!user && (
             <div className="space-y-1.5">
               <Link to="/services" onClick={() => setIsOpen(false)} className="block py-2 px-3 text-xs font-bold text-slate-700 hover:bg-slate-200 rounded-xl">
                 Services
@@ -293,21 +331,6 @@ export default function Navbar() {
               </Link>
               <Link to="/contact" onClick={() => setIsOpen(false)} className="block py-2 px-3 text-xs font-bold text-slate-700 hover:bg-slate-200 rounded-xl">
                 Support
-              </Link>
-            </div>
-          )}
-
-          {/* User Specific Mobile Links */}
-          {isUser && (
-            <div className="pt-2 border-t border-slate-200 space-y-1.5">
-              <Link to="/dashboard" onClick={() => setIsOpen(false)} className="block py-2 px-3 text-xs font-bold text-slate-700 hover:bg-slate-200 rounded-xl">
-                Dashboard
-              </Link>
-              <Link to="/history" onClick={() => setIsOpen(false)} className="block py-2 px-3 text-xs font-bold text-slate-700 hover:bg-slate-200 rounded-xl">
-                Passbook / History
-              </Link>
-              <Link to="/profile" onClick={() => setIsOpen(false)} className="block py-2 px-3 text-xs font-bold text-slate-700 hover:bg-slate-200 rounded-xl">
-                My Profile
               </Link>
             </div>
           )}
