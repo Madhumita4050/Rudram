@@ -48,10 +48,10 @@ const PORT = process.env.PORT || 5000;
 // Helper to seed initial admin, services & payment settings
 const seedInitialData = async () => {
   try {
-    // 1. Seed Admin User
+    // 1. Seed Admin User (only if no admin exists in the database)
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@rudram.com';
-    const adminExists = await User.findOne({ where: { email: adminEmail } });
-    if (!adminExists) {
+    const anyAdminExists = await User.findOne({ where: { role: 'admin' } });
+    if (!anyAdminExists) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'Admin@12345', salt);
       await User.create({
@@ -64,9 +64,6 @@ const seedInitialData = async () => {
         status: 'active'
       });
       console.log(`✅ Default admin created: ${adminEmail} / Admin@12345`);
-    } else if (adminExists.role !== 'admin') {
-      adminExists.role = 'admin';
-      await adminExists.save();
     }
 
     // 2. Seed Services if empty

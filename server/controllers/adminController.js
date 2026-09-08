@@ -1,4 +1,6 @@
 const { Op } = require('sequelize');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Registration = require('../models/Registration');
 const RequestHistory = require('../models/RequestHistory');
@@ -156,14 +158,27 @@ exports.getAllUsers = async (req, res) => {
     const { search, role, status } = req.query;
     const where = {};
 
-    if (role && role !== 'All') where.role = role;
+    // Strictly exclude admin accounts so they are never visible in general user list
+    if (role && role !== 'All') {
+      where.role = role === 'admin' ? 'user' : role;
+    } else {
+      where.role = { [Op.ne]: 'admin' };
+    }
+
     if (status && status !== 'All') where.status = status;
     if (search) {
-      where[Op.or] = [
-        { name: { [Op.like]: `%${search}%` } },
-        { email: { [Op.like]: `%${search}%` } },
-        { phone: { [Op.like]: `%${search}%` } }
+      const baseRole = where.role;
+      where[Op.and] = [
+        { role: baseRole },
+        {
+          [Op.or]: [
+            { name: { [Op.like]: `%${search}%` } },
+            { email: { [Op.like]: `%${search}%` } },
+            { phone: { [Op.like]: `%${search}%` } }
+          ]
+        }
       ];
+      delete where.role;
     }
 
     const users = await User.findAll({
@@ -421,5 +436,95 @@ exports.getUserDashboard = async (req, res) => {
   } catch (error) {
     console.error('Error fetching user dashboard:', error);
     res.status(500).json({ message: 'Error fetching user dashboard', error: error.message });
+  }
+};
+
+// ==================== ADMIN PROFILE & SECURITY MANAGEMENT ====================
+exports.getAdminProfile = async (req, res) => {
+  try {
+    const adminId = req.user.id;
+    const admin = await User.findByPk(adminId, {
+      attributes: { exclude: ['password'] }
+    });
+    if (!admin || admin.role !== 'admin') {
+      return res.status(404).json({ message: 'Admin account not found' });
+    }
+    res.json(admin);
+  } catch (error) {
+    console.error('Error fetching admin profile:', error);
+    res.status(500).json({ message: 'Error fetching admin profile', error: error.message });
+  }
+};
+
+exports.updateAdminProfile = async (req, res) => {
+  try {
+    const adminId = req.user.id;
+    const { name, email, phone, currentPassword, newPassword } = req.body;
+
+    const admin = await User.findByPk(adminId);
+    if (!admin || admin.role !== 'admin') {
+      return res.status(404).json({ message: 'Admin account not found or access denied' });
+    }
+
+    // Email update check
+    if (email && email.toLowerCase() !== admin.email.toLowerCase()) {
+      const trimmedEmail = email.toLowerCase().trim();
+      const existingUser = await User.findOne({
+        where: {
+          email: trimmedEmail,
+          id: { [Op.ne]: adminId }
+        }
+      });
+      if (existingUser) {
+        return res.status(400).json({ message: 'This email address is already registered by another account.' });
+      }
+      admin.email = trimmedEmail;
+    }
+
+    // Password update check
+    if (newPassword && newPassword.trim() !== '') {
+      if (!currentPassword) {
+        return res.status(400).json({ message: 'Current password is required to update to a new password.' });
+      }
+      if (newPassword.length < 6) {
+        return res.status(400).json({ message: 'New password must be at least 6 characters long.' });
+      }
+
+      const isMatch = await bcrypt.compare(currentPassword, admin.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: 'Current password does not match.' });
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      admin.password = await bcrypt.hash(newPassword, salt);
+    }
+
+    if (name) admin.name = name.trim();
+    if (phone !== undefined) admin.phone = phone.trim();
+
+    await admin.save();
+
+    // Generate renewed JWT token
+    const payload = { user: { id: admin.id, role: admin.role } };
+    const token = jwt.sign(payload, process.env.JWT_SECRET || 'rudram_jwt_secret_key_2026', { expiresIn: '7d' });
+
+    res.json({
+      message: 'Admin profile and credentials updated successfully.',
+      token,
+      user: {
+        id: admin.id,
+        name: admin.name,
+        email: admin.email,
+        phone: admin.phone,
+        role: admin.role,
+        walletBalance: admin.walletBalance,
+        status: admin.status,
+        avatar: admin.avatar,
+        updatedAt: admin.updatedAt
+      }
+    });
+  } catch (error) {
+    console.error('Error updating admin credentials:', error);
+    res.status(500).json({ message: 'Error updating admin credentials', error: error.message });
   }
 };

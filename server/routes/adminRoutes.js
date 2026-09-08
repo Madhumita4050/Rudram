@@ -30,6 +30,10 @@ router.use(authMiddleware, adminMiddleware);
 // Dashboard Stats
 router.get('/stats', adminController.getDashboardStats);
 
+// Admin Profile & Security Settings
+router.get('/profile', adminController.getAdminProfile);
+router.put('/profile', adminController.updateAdminProfile);
+
 // Registrations
 router.get('/registrations', adminController.getAllRegistrations);
 router.get('/registrations/:id', adminController.getRegistrationById);
