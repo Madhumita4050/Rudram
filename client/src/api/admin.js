@@ -196,3 +196,28 @@ export const updateAdminInquiryStatus = async (id, status, adminReply) => {
   if (!res.ok) throw new Error('Failed to update inquiry status');
   return res.json();
 };
+
+// 8. Admin Profile & Security Settings
+export const getAdminProfile = async () => {
+  const res = await fetch(`${API_URL}/admin/profile`, {
+    headers: getHeaders()
+  });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || 'Failed to fetch admin profile');
+  }
+  return res.json();
+};
+
+export const updateAdminProfile = async (profileData) => {
+  const res = await fetch(`${API_URL}/admin/profile`, {
+    method: 'PUT',
+    headers: getHeaders(),
+    body: JSON.stringify(profileData)
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(data.message || 'Failed to update admin profile credentials');
+  }
+  return data;
+};

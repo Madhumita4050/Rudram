@@ -26,6 +26,7 @@ import AdminRequests from './pages/admin/AdminRequests';
 import AdminServices from './pages/admin/AdminServices';
 import AdminInquiries from './pages/admin/AdminInquiries';
 import AdminPaymentSettings from './pages/admin/AdminPaymentSettings';
+import AdminSettings from './pages/admin/AdminSettings';
 
 // New Pages
 import Developers from './pages/Developers';
@@ -84,6 +85,7 @@ function AppContent() {
             <Route path="requests" element={<AdminRequests />} />
             <Route path="services" element={<AdminServices />} />
             <Route path="inquiries" element={<AdminInquiries />} />
+            <Route path="settings" element={<AdminSettings />} />
           </Route>
         </Routes>
       </main>

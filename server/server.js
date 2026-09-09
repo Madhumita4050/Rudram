@@ -49,7 +49,7 @@ const PORT = process.env.PORT || 5000;
 const seedInitialData = async () => {
   try {
     // 1. Seed Admin User (only if no admin exists in the database)
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@rudram.com';
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@rudran.com';
     const anyAdminExists = await User.findOne({ where: { role: 'admin' } });
     if (!anyAdminExists) {
       const salt = await bcrypt.genSalt(10);
@@ -149,7 +149,7 @@ const init = async () => {
       password: process.env.DB_PASSWORD || '',
     });
     
-    await connection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME || 'rudram_db'}\`;`);
+    await connection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME || 'rudran_db'}\`;`);
     await connection.end();
     console.log('Database checked/created successfully.');
 

@@ -15,7 +15,9 @@ import {
   ChevronRight,
   Sparkles,
   AlertCircle,
-  QrCode
+  QrCode,
+  ShieldCheck,
+  Settings
 } from 'lucide-react';
 import logoImg from '../../assets/logo.png';
 import logoFullImg from '../../assets/logo_full.png';
@@ -69,11 +71,12 @@ export default function AdminLayout({ children }) {
     { label: 'Service Requests', path: '/admin/requests', icon: CreditCard },
     { label: 'Services Catalog', path: '/admin/services', icon: Layers },
     { label: 'Inquiries & Support', path: '/admin/inquiries', icon: MessageSquare },
+    { label: 'Admin Settings', path: '/admin/settings', icon: ShieldCheck },
   ];
 
   // Direct Admin Login Handler
-  const [adminEmail, setAdminEmail] = useState('admin@rudram.com');
-  const [adminPassword, setAdminPassword] = useState('Admin@12345');
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState(null);
 
@@ -142,7 +145,7 @@ export default function AdminLayout({ children }) {
                 required
                 value={adminEmail}
                 onChange={(e) => setAdminEmail(e.target.value)}
-                placeholder="admin@rudram.com"
+                placeholder="admin@rudran.com"
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
               />
             </div>
@@ -269,17 +272,23 @@ export default function AdminLayout({ children }) {
             </Link>
 
             {/* Admin Profile Box */}
-            <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+            <Link
+              to="/admin/settings"
+              onClick={() => setMobileOpen(false)}
+              className="p-3 bg-slate-50 hover:bg-amber-50/50 rounded-2xl border border-slate-200 hover:border-amber-200 flex items-center justify-between transition-all group"
+              title="Admin Security & Account Settings"
+            >
               <div className="flex items-center gap-2.5 overflow-hidden">
-                <div className="w-9 h-9 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                <div className="w-9 h-9 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm flex-shrink-0 group-hover:bg-amber-500 group-hover:text-white transition-colors">
                   {currentUser?.name?.charAt(0) || 'A'}
                 </div>
                 <div className="overflow-hidden">
-                  <p className="text-xs font-bold text-slate-900 truncate">{currentUser?.name || 'Administrator'}</p>
+                  <p className="text-xs font-bold text-slate-900 truncate group-hover:text-amber-700 transition-colors">{currentUser?.name || 'Administrator'}</p>
                   <p className="text-[10px] text-slate-500 truncate">{currentUser?.email}</p>
                 </div>
               </div>
-            </div>
+              <Settings className="w-4 h-4 text-slate-400 group-hover:text-amber-600 transition-colors flex-shrink-0" />
+            </Link>
 
             {/* Prominent Sidebar Logout Button */}
             <button

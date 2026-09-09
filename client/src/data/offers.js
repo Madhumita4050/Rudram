@@ -1,7 +1,7 @@
 export const offers = [
   {
     id: 'off-01',
-    code: 'RUDRAM50',
+    code: 'RUDRAN50',
     title: 'Flat ₹50 Cashback',
     description: 'Get flat ₹50 cashback on your first mobile recharge of the month. Min transaction ₹299.'
   },

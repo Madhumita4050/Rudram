@@ -101,7 +101,8 @@ export default function AdminRegistrations() {
 
   // Get photo/proof full URL
   const getAssetUrl = (assetPath) => {
-    if (!assetPath) return null;
+    if (!assetPath || assetPath === '0' || assetPath === 'null' || assetPath === 'undefined' || typeof assetPath !== 'string') return null;
+    if (assetPath.trim() === '') return null;
     if (assetPath.startsWith('http')) return assetPath;
     const cleanPath = assetPath.replace(/\\/g, '/').replace(/^\/+/, '');
     const baseUrl = API_BASE_URL.replace('/api', '');
@@ -392,16 +393,26 @@ export default function AdminRegistrations() {
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-start">
               {/* Photo */}
               <div className="sm:col-span-4 flex flex-col items-center">
-                <div className="w-32 h-40 rounded-2xl bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center shadow-sm">
-                  {selectedApplicant.photo ? (
+                <div className="w-32 h-40 rounded-2xl bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center shadow-sm relative">
+                  {getAssetUrl(selectedApplicant.photo) ? (
                     <img
                       src={getAssetUrl(selectedApplicant.photo)}
                       alt={selectedApplicant.name}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        if (e.target.nextSibling) {
+                          e.target.nextSibling.style.display = 'flex';
+                        }
+                      }}
                     />
-                  ) : (
+                  ) : null}
+                  <div
+                    className="w-full h-full flex items-center justify-center bg-slate-100"
+                    style={{ display: getAssetUrl(selectedApplicant.photo) ? 'none' : 'flex' }}
+                  >
                     <User className="w-12 h-12 text-slate-400" />
-                  )}
+                  </div>
                 </div>
                 <span className="text-[11px] text-slate-500 mt-2 font-medium">Passport Photo</span>
               </div>
@@ -477,24 +488,34 @@ export default function AdminRegistrations() {
               </div>
 
               {/* Payment Proof Receipt Image if uploaded */}
-              {selectedApplicant.paymentProof && (
+              {getAssetUrl(selectedApplicant.paymentProof) ? (
                 <div className="pt-3 border-t border-slate-200">
                   <span className="text-[10px] uppercase font-bold text-slate-500 block mb-2">Uploaded Payment Screenshot</span>
                   <a
                     href={getAssetUrl(selectedApplicant.paymentProof)}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-block relative group rounded-xl overflow-hidden border border-slate-200 hover:border-amber-500 transition-all max-w-xs shadow-sm"
+                    className="inline-block relative group rounded-xl overflow-hidden border border-slate-200 hover:border-amber-500 transition-all max-w-xs shadow-sm bg-white"
                   >
                     <img
                       src={getAssetUrl(selectedApplicant.paymentProof)}
                       alt="Payment Proof"
-                      className="w-full max-h-48 object-cover rounded-xl"
+                      className="w-full max-h-48 object-contain rounded-xl"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
                     />
                     <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 text-xs text-white font-bold transition-opacity">
                       <ExternalLink className="w-4 h-4" /> Click to view full image
                     </div>
                   </a>
+                </div>
+              ) : (
+                <div className="pt-3 border-t border-slate-200">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Payment Screenshot</span>
+                  <p className="text-xs text-slate-500 italic mt-0.5">
+                    No screenshot uploaded (Verified via UTR / UPI Reference ID).
+                  </p>
                 </div>
               )}
             </div>

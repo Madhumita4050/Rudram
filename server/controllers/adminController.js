@@ -506,7 +506,7 @@ exports.updateAdminProfile = async (req, res) => {
 
     // Generate renewed JWT token
     const payload = { user: { id: admin.id, role: admin.role } };
-    const token = jwt.sign(payload, process.env.JWT_SECRET || 'rudram_jwt_secret_key_2026', { expiresIn: '7d' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET || 'rudran_jwt_secret_key_2026', { expiresIn: '7d' });
 
     res.json({
       message: 'Admin profile and credentials updated successfully.',

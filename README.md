@@ -4,7 +4,7 @@ A modern digital payment and fintech assisted services web application built wit
 
 ## 📂 Project Architecture
 ```
-Rudram/
+Rudran/
 ├── client/         # Frontend React Application (Vite + Tailwind CSS)
 │   ├── src/
 │   │   ├── components/
@@ -43,7 +43,7 @@ npm start
 
 ### 🛡️ Admin Panel (`/admin`)
 - **URL**: `http://localhost:5173/admin`
-- **Default Email**: `admin@rudram.com`
+- **Default Email**: `admin@rudran.com`
 - **Default Password**: `Admin@12345`
 - **Features**:
   - **Overview Dashboard**: Live statistics of total revenue, citizen registrations, users, service transactions, and support tickets.

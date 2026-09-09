@@ -25,7 +25,7 @@ exports.register = async (req, res) => {
     });
 
     const payload = { user: { id: user.id, role: user.role } };
-    const token = jwt.sign(payload, process.env.JWT_SECRET || 'rudram_jwt_secret_key_2026', { expiresIn: '7d' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET || 'rudran_jwt_secret_key_2026', { expiresIn: '7d' });
 
     res.json({
       token,
@@ -64,7 +64,7 @@ exports.login = async (req, res) => {
     }
 
     const payload = { user: { id: user.id, role: user.role } };
-    const token = jwt.sign(payload, process.env.JWT_SECRET || 'rudram_jwt_secret_key_2026', { expiresIn: '7d' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET || 'rudran_jwt_secret_key_2026', { expiresIn: '7d' });
 
     res.json({
       token,

@@ -8,7 +8,7 @@ const authMiddleware = (req, res, next) => {
   }
 
   try {
-    const secret = process.env.JWT_SECRET || 'rudram_jwt_secret_key_2026';
+    const secret = process.env.JWT_SECRET || 'rudran_jwt_secret_key_2026';
     const decoded = jwt.verify(token.replace('Bearer ', ''), secret);
     req.user = decoded.user;
     next();

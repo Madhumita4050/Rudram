@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.4.32-MariaDB, for Win64 (AMD64)
 --
--- Host: localhost    Database: rudram_db
+-- Host: localhost    Database: rudran_db
 -- ------------------------------------------------------
 -- Server version	10.4.32-MariaDB
 
