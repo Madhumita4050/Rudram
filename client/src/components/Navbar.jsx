@@ -89,83 +89,58 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-14">
           
           {/* Left Side: Logo */}
-          <div className="flex items-center space-x-8">
-            <Link to={isAdmin ? "/admin" : isUser ? "/dashboard" : "/"} className="flex items-center gap-3 mr-3 group">
-              <img src={logoFullImg} alt="RudranPay Logo" className="h-10 md:h-11 object-contain group-hover:scale-102 transition-transform" />
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center gap-2.5 mr-6 group shrink-0">
+              <img src={logoFullImg} alt="RudranPay Logo" className="h-9 md:h-10 object-contain group-hover:scale-102 transition-transform" />
               {isAdmin && (
-                <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 bg-amber-100/90 px-2 py-0.5 rounded-md ml-1">
-                  Admin Hub
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 bg-amber-200/90 px-2 py-0.5 rounded-md whitespace-nowrap">
+                  Admin
                 </span>
               )}
               {isUser && (
-                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100/90 px-2 py-0.5 rounded-md ml-1">
-                  User Portal
+                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-800 bg-blue-200/90 px-2 py-0.5 rounded-md whitespace-nowrap">
+                  User
                 </span>
               )}
             </Link>
 
             {/* Navigation Links */}
-            <div className="hidden lg:flex space-x-1.5 items-center">
-              {/* ADMIN MODE LINKS */}
-              {isAdmin ? (
-                <>
-                  <Link to="/admin" className={`text-sm font-bold px-3.5 py-2 rounded-xl transition-all ${location.pathname === '/admin' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-750 hover:text-slate-950 hover:bg-sky-200/50'}`}>
-                    Dashboard
-                  </Link>
-                  <Link to="/admin/registrations" className={`text-sm font-bold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/admin/registrations') ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-750 hover:text-slate-950 hover:bg-sky-200/50'}`}>
-                    Registrations
-                  </Link>
-                  <Link to="/admin/payment-settings" className={`text-sm font-bold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/admin/payment-settings') ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-750 hover:text-slate-950 hover:bg-sky-200/50'}`}>
-                    Payment & QR
-                  </Link>
-                  <Link to="/admin/users" className={`text-sm font-bold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/admin/users') ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-750 hover:text-slate-950 hover:bg-sky-200/50'}`}>
-                    Users
-                  </Link>
-                  <Link to="/admin/requests" className={`text-sm font-bold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/admin/requests') ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-750 hover:text-slate-950 hover:bg-sky-200/50'}`}>
-                    Service Requests
-                  </Link>
-                  <Link to="/admin/services" className={`text-sm font-bold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/admin/services') ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-750 hover:text-slate-950 hover:bg-sky-200/50'}`}>
-                    Services Catalog
-                  </Link>
-                  <Link to="/admin/inquiries" className={`text-sm font-bold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/admin/inquiries') ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-750 hover:text-slate-950 hover:bg-sky-200/50'}`}>
-                    Inquiries
-                  </Link>
-                </>
-              ) : isUser ? (
+            <div className="hidden lg:flex space-x-1 items-center">
+              {isUser ? (
                 /* USER PORTAL SPECIFIC LINKS ONLY */
                 <>
-                  <Link to="/dashboard" className={`text-sm font-bold px-4 py-2 rounded-xl transition-all ${location.pathname === '/dashboard' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                  <Link to="/dashboard" className={`text-sm font-bold px-3.5 py-2 rounded-xl transition-all ${location.pathname === '/dashboard' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
                     Dashboard
                   </Link>
-                  <Link to="/history" className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all ${location.pathname.startsWith('/history') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
-                    Passbook / History
+                  <Link to="/history" className={`text-sm font-semibold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/history') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                    Passbook
                   </Link>
-                  <Link to="/offers" className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all ${location.pathname.startsWith('/offers') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
-                    Special Offers
+                  <Link to="/offers" className={`text-sm font-semibold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/offers') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                    Offers
                   </Link>
-                  <Link to="/contact" className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all ${location.pathname.startsWith('/contact') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
-                    Help & Support
+                  <Link to="/contact" className={`text-sm font-semibold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/contact') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                    Support
                   </Link>
                 </>
               ) : (
-                /* GUEST / PUBLIC NAVIGATION */
+                /* GUEST & ADMIN PUBLIC NAVIGATION */
                 <>
-                  <Link to="/services" className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all ${location.pathname.startsWith('/services') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                  <Link to="/services" className={`text-sm font-semibold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/services') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
                     Services
                   </Link>
-                  <Link to="/developers" className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all ${location.pathname.startsWith('/developers') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                  <Link to="/developers" className={`text-sm font-semibold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/developers') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
                     Developers
                   </Link>
-                  <Link to="/pricing" className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all ${location.pathname.startsWith('/pricing') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                  <Link to="/pricing" className={`text-sm font-semibold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/pricing') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
                     Pricing
                   </Link>
-                  <Link to="/resources" className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all ${location.pathname.startsWith('/resources') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                  <Link to="/resources" className={`text-sm font-semibold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/resources') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
                     Resources
                   </Link>
-                  <Link to="/about" className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all ${location.pathname.startsWith('/about') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                  <Link to="/about" className={`text-sm font-semibold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/about') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
                     About
                   </Link>
-                  <Link to="/contact" className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all ${location.pathname.startsWith('/contact') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
+                  <Link to="/contact" className={`text-sm font-semibold px-3.5 py-2 rounded-xl transition-all ${location.pathname.startsWith('/contact') ? 'bg-slate-900 text-white font-bold shadow-sm' : 'text-slate-800 hover:text-slate-950 hover:bg-sky-200/50'}`}>
                     Support
                   </Link>
                 </>
@@ -173,56 +148,67 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Right Side: Actions (Download App, Bell, Profile/Auth Buttons) */}
-          <div className="hidden lg:flex items-center space-x-3.5">
-            {/* Download App Button (Opens Download Popup) */}
+          {/* Right Side: Actions (Download App, Admin Panel Button, Profile/Auth Buttons) */}
+          <div className="hidden lg:flex items-center space-x-3">
+            {/* Download App Button */}
             <button
               type="button"
               onClick={() => setDownloadModalOpen(true)}
-              className="text-sm font-semibold text-slate-800 hover:text-slate-950 px-3.5 py-2 rounded-xl hover:bg-sky-200/50 transition-all flex items-center gap-1.5 cursor-pointer"
+              className="text-sm font-semibold text-slate-800 hover:text-slate-950 px-3 py-2 rounded-xl hover:bg-sky-200/50 transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <Smartphone className="w-4 h-4 text-amber-600" />
               <span>Download App</span>
             </button>
 
+            {/* Admin Panel Quick Jump Button (for Admin on live site) */}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-amber-400 border border-slate-800 rounded-xl text-xs font-bold transition-all shadow-xs"
+              >
+                <ShieldCheck className="w-4 h-4 text-amber-400" />
+                <span>Admin Panel</span>
+              </Link>
+            )}
+
             {/* Auth / Profile Area */}
             {user ? (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2.5">
                 {isUser && user.walletBalance !== undefined && (
-                  <div className="flex items-center gap-2 px-3.5 py-2 bg-white border border-sky-200 rounded-xl text-sm text-slate-900 font-bold shadow-xs">
-                    <Wallet className="w-4 h-4 text-amber-600" />
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-sky-200 rounded-xl text-xs text-slate-900 font-bold shadow-xs">
+                    <Wallet className="w-3.5 h-3.5 text-amber-600" />
                     <span>₹{user.walletBalance.toLocaleString('en-IN')}</span>
                   </div>
                 )}
 
                 <Link 
-                  to="/profile" 
-                  className="flex items-center gap-2 px-4 py-2 bg-white border border-sky-200 text-slate-900 rounded-xl text-sm font-semibold hover:border-sky-300 hover:bg-sky-50 transition-all shadow-xs"
+                  to={isAdmin ? "/admin" : "/profile"} 
+                  className="flex items-center gap-2 px-3.5 py-2 bg-white border border-sky-200 text-slate-900 rounded-xl text-xs font-semibold hover:border-sky-300 hover:bg-sky-50 transition-all shadow-xs"
                 >
-                  <UserIcon className="h-4 w-4 text-amber-600" />
-                  <span className="truncate max-w-[120px]">{user.name ? user.name.split(' ')[0] : (isAdmin ? 'Admin' : 'User')}</span>
+                  <UserIcon className="h-3.5 w-3.5 text-amber-600" />
+                  <span className="truncate max-w-[100px]">{user.name ? user.name.split(' ')[0] : (isAdmin ? 'Admin' : 'User')}</span>
                 </Link>
 
                 <button 
                   onClick={handleLogout}
-                  className="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 rounded-xl text-sm font-semibold transition-all"
+                  className="flex items-center gap-1 px-3 py-2 text-slate-600 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 rounded-xl text-xs font-semibold transition-all"
                   title="Logout"
                 >
-                  <LogOut className="h-4 w-4" />
+                  <LogOut className="h-3.5 w-3.5" />
                   <span>Logout</span>
                 </button>
               </div>
             ) : (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2.5">
                 <Link 
                   to="/login" 
-                  className="px-5 py-2 border border-sky-300 hover:border-slate-900 text-slate-800 hover:text-slate-950 hover:bg-white/80 rounded-full text-sm font-bold transition-all"
+                  className="px-4 py-2 border border-sky-300 hover:border-slate-900 text-slate-800 hover:text-slate-950 hover:bg-white/80 rounded-full text-xs font-bold transition-all"
                 >
                   Sign In
                 </Link>
                 <Link 
                   to="/register" 
-                  className="px-6 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-full text-sm font-black shadow-sm transition-all"
+                  className="px-5 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-full text-xs font-black shadow-sm transition-all"
                 >
                   Register
                 </Link>
