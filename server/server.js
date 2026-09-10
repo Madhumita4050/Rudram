@@ -147,7 +147,7 @@ const init = async () => {
     console.log('✅ MySQL connected via Sequelize.');
 
     // Sync Models
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     console.log('✅ Database models synced.');
 
     // Seed initial data
