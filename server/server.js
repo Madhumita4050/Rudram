@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const sequelize = require('./config/database');
-const mysql = require('mysql2/promise');
+
 const bcrypt = require('bcrypt');
 const path = require('path');
 
@@ -139,36 +139,28 @@ const seedInitialData = async () => {
 };
 
 // Initialize Database and Start Server
+// Initialize Database and Start Server
 const init = async () => {
   try {
-    // 1. Create database if it doesn't exist
-    const connection = await mysql.createConnection({
-      host: process.env.DB_HOST || 'localhost',
-      user: process.env.DB_USER || 'root',
-      port: process.env.DB_PORT || 3306,
-      password: process.env.DB_PASSWORD || '',
-    });
-    
-    await connection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME || 'rudran_db'}\`;`);
-    await connection.end();
-    console.log('Database checked/created successfully.');
-
-    // 2. Connect Sequelize
+    // Connect to existing MySQL database
     await sequelize.authenticate();
-    console.log('MySQL connected via Sequelize.');
+    console.log('✅ MySQL connected via Sequelize.');
 
-    // 3. Sync Models
+    // Sync Models
     await sequelize.sync({ alter: true });
-    console.log('Database models synced.');
+    console.log('✅ Database models synced.');
 
-    // 4. Seed initial data
+    // Seed initial data
     await seedInitialData();
 
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+    // Start server
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`✅ Server running on port ${PORT}`);
     });
+
   } catch (error) {
-    console.error('Unable to start the server:', error);
+    console.error('❌ Unable to start the server:', error);
+    process.exit(1);
   }
 };
 
