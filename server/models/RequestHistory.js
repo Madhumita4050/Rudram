@@ -21,12 +21,12 @@ const RequestHistory = sequelize.define(
 
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
 
     serviceId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
 
     amount: {
@@ -46,6 +46,7 @@ const RequestHistory = sequelize.define(
   },
   {
     timestamps: true,
+    tableName: 'requesthistories',
   }
 );
 
