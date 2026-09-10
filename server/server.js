@@ -159,9 +159,15 @@ const init = async () => {
     });
 
   } catch (error) {
-    console.error('❌ Unable to start the server:', error);
-    process.exit(1);
-  }
+  console.error('❌ Unable to start the server');
+  console.error('ERROR MESSAGE:', error.message);
+  console.error('ERROR NAME:', error.name);
+  console.error('ERROR CODE:', error.original?.code);
+  console.error('SQL ERROR:', error.original?.sqlMessage);
+  console.error('SQL:', error.sql);
+  console.error('FULL ERROR:', error);
+  process.exit(1);
+}
 };
 
 init();
