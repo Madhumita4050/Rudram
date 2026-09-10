@@ -80,7 +80,7 @@ export default function Signup() {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Rajesh Kumar"
+                placeholder=""
                 className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-200 placeholder-slate-650 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
               />
             </div>
@@ -97,7 +97,7 @@ export default function Signup() {
                 required
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="9876543210"
+                placeholder=""
                 className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-200 placeholder-slate-650 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
               />
             </div>
@@ -114,7 +114,7 @@ export default function Signup() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="rajesh.kumar@example.com"
+                placeholder=""
                 className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-200 placeholder-slate-650 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
               />
             </div>
@@ -131,7 +131,7 @@ export default function Signup() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder=""
                 className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-200 placeholder-slate-650 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
               />
             </div>

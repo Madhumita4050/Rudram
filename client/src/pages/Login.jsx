@@ -99,7 +99,7 @@ export default function Login() {
                 disabled={loading}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@rudran.com or user@example.com"
+                placeholder=""
                 className="w-full bg-slate-900/90 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all disabled:opacity-60"
               />
             </div>
@@ -120,7 +120,7 @@ export default function Login() {
                 disabled={loading}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder=""
                 className="w-full bg-slate-900/90 border border-slate-800 rounded-xl pl-10 pr-11 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all disabled:opacity-60"
               />
               <button
